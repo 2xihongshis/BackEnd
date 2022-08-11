@@ -1,22 +1,23 @@
 package cn.org.twotomatoes.monitor.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * 监控 jsError
- * @TableName js_error
  */
-@TableName(value ="js_error")
+@TableName(value = "js_error")
 @Data
 public class JsError implements Serializable {
     /**
      * 自增的唯一标识
      */
+    @TableId
     private Long id;
 
     /**

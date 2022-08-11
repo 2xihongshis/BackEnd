@@ -1,22 +1,23 @@
 package cn.org.twotomatoes.monitor.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * 监控 resourceError
- * @TableName resource_error
  */
-@TableName(value ="resource_error")
+@TableName(value = "resource_error")
 @Data
 public class ResourceError implements Serializable {
     /**
      * 自增的唯一标识
      */
+    @TableId
     private Long id;
 
     /**

@@ -1,22 +1,23 @@
 package cn.org.twotomatoes.monitor.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * 记录访问信息
- * @TableName visit_info
  */
-@TableName(value ="visit_info")
+@TableName(value = "visit_info")
 @Data
 public class VisitInfo implements Serializable {
     /**
      * 自增的唯一标识
      */
+    @TableId
     private Long id;
 
     /**

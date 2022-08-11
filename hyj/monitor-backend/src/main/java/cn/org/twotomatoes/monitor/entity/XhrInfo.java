@@ -1,22 +1,23 @@
 package cn.org.twotomatoes.monitor.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * 监控 xhr 接口
- * @TableName xhr_info
  */
-@TableName(value ="xhr_info")
+@TableName(value = "xhr_info")
 @Data
 public class XhrInfo implements Serializable {
     /**
      * 自增的唯一标识
      */
+    @TableId
     private Long id;
 
     /**

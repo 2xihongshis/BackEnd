@@ -1,22 +1,23 @@
 package cn.org.twotomatoes.monitor.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * 监控渲染时间
- * @TableName paint_time
  */
-@TableName(value ="paint_time")
+@TableName(value = "paint_time")
 @Data
 public class PaintTime implements Serializable {
     /**
      * 自增的唯一标识
      */
+    @TableId
     private Long id;
 
     /**

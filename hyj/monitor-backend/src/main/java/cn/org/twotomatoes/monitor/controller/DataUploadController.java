@@ -1,9 +1,9 @@
 package cn.org.twotomatoes.monitor.controller;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.org.twotomatoes.monitor.dto.R;
 import cn.org.twotomatoes.monitor.util.MyRequestWrapper;
+import cn.org.twotomatoes.monitor.util.UploadMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,19 +21,21 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("upload")
 public class DataUploadController {
 
+    /**
+     * 对上传的数据进行转发
+     *
+     * @param request 请求内容
+     * @param response 响应内容
+     */
     @PostMapping
     @SneakyThrows
     public void upload(HttpServletRequest request, HttpServletResponse response) {
-        log.info("upload 被访问");
         MyRequestWrapper myRequest = new MyRequestWrapper(request);
-        String type = (String) new JSONObject(myRequest.getBody()).get("type");
-        log.info(type);
-        if (StrUtil.isBlank(type)) {
-            request.getRequestDispatcher("/upload/fail").forward(myRequest, response);
-            return;
-        }
 
-        request.getRequestDispatcher("/test").forward(myRequest, response);
+        String type = (String) new JSONObject(myRequest.getBody()).get("type");
+
+        request.getRequestDispatcher(UploadMapper.getURL(type))
+                .forward(myRequest, response);
     }
 
     @ResponseBody

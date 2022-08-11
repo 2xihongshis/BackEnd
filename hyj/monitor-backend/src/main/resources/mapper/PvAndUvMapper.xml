@@ -5,7 +5,7 @@
 <mapper namespace="cn.org.twotomatoes.monitor.mapper.PvAndUvMapper">
 
     <resultMap id="BaseResultMap" type="cn.org.twotomatoes.monitor.entity.PvAndUv">
-            <result property="id" column="id" jdbcType="BIGINT"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="type" column="type" jdbcType="TINYINT"/>
             <result property="time" column="time" jdbcType="TIMESTAMP"/>
             <result property="num" column="num" jdbcType="BIGINT"/>

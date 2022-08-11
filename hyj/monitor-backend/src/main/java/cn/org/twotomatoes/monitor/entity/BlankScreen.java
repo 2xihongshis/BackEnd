@@ -1,22 +1,23 @@
 package cn.org.twotomatoes.monitor.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * 监控白屏
- * @TableName blank_screen
  */
-@TableName(value ="blank_screen")
+@TableName(value = "blank_screen")
 @Data
 public class BlankScreen implements Serializable {
     /**
      * 自增的唯一标识
      */
+    @TableId
     private Long id;
 
     /**
@@ -47,7 +48,7 @@ public class BlankScreen implements Serializable {
     /**
      * 空白点集
      */
-    private String emptypoints;
+    private String emptyPoints;
 
     /**
      * 屏幕分辨率
