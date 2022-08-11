@@ -1,10 +1,4 @@
-/hyj/monitor-backend/src/main/resources/application.yml
-/hyj/monitor-backend/.idea
-/hyj/monitor-backend/monitor-backend.iml
-/hyj/monitor-backend/target
-
-/yjy/monitor-backend/src/main/resources/application/monitor-backend/src/main/resources/application.yml
-/yjy/monitor-backend/.idea
-/yjy/monitor-backend/monitor-backend.iml
-/yjy/monitor-backend/target
-
+/src/main/resources/application.yml
+/.idea
+/monitor-backend.iml
+/target
