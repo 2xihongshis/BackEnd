@@ -7,6 +7,9 @@ import cn.org.twotomatoes.monitor.service.JsErrorService;
 import cn.org.twotomatoes.monitor.mapper.JsErrorMapper;
 import org.springframework.stereotype.Service;
 
+import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
+import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
+
 /**
  *
  */
@@ -16,7 +19,7 @@ public class JsErrorServiceImpl extends ServiceImpl<JsErrorMapper, JsError>
 
     @Override
     public R<String> uploadJsError(JsError jsError) {
-        return save(jsError) ? R.success("success") : R.error("fail");
+        return save(jsError) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
     }
 }
 

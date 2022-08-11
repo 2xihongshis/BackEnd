@@ -1,5 +1,6 @@
 package cn.org.twotomatoes.monitor.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,6 +24,7 @@ public class BlankScreen implements Serializable {
     /**
      * 请求的 ip 地址
      */
+    @TableField(fill = FieldFill.INSERT)
     private String ip;
 
     /**
