@@ -16,7 +16,7 @@ public class JsErrorServiceImpl extends ServiceImpl<JsErrorMapper, JsError>
 
     @Override
     public R<String> uploadJsError(JsError jsError) {
-        return null;
+        return save(jsError) ? R.success("success") : R.error("fail");
     }
 }
 

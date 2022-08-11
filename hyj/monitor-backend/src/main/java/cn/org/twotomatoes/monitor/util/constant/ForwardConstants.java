@@ -6,7 +6,7 @@ package cn.org.twotomatoes.monitor.util.constant;
  * @author HeYunjia
  */
 public class ForwardConstants {
-    public static final String JS_ERROR_URL = "jsError";
+    public static final String JS_ERROR_URL = "/js-error/upload";
     public static final String PROMISE_ERROR_URL = "promiseError";
     public static final String RESOURCE_ERROR_URL = "resourceError";
 

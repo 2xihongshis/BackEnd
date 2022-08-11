@@ -33,6 +33,7 @@ public class DataUploadController {
         MyRequestWrapper myRequest = new MyRequestWrapper(request);
 
         String type = (String) new JSONObject(myRequest.getBody()).get("type");
+        log.info("type 类型为: {}", type);
 
         request.getRequestDispatcher(UploadMapper.getURL(type))
                 .forward(myRequest, response);
