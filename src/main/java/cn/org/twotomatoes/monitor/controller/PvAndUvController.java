@@ -2,8 +2,8 @@ package cn.org.twotomatoes.monitor.controller;
 
 import cn.hutool.json.JSONUtil;
 import cn.org.twotomatoes.monitor.dto.R;
-import cn.org.twotomatoes.monitor.entity.PromiseError;
-import cn.org.twotomatoes.monitor.service.PromiseErrorService;
+import cn.org.twotomatoes.monitor.entity.PvAndUv;
+import cn.org.twotomatoes.monitor.service.PvAndUvService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,20 +15,20 @@ import javax.annotation.Resource;
 /**
  * @author HeYunjia
  */
-
 @Slf4j
 @RestController
-@RequestMapping("promise-error")
-public class PromiseErrorController {
+@RequestMapping("pv-uv")
+public class PvAndUvController {
 
     @Resource
-    private PromiseErrorService promiseErrorService;
+    private PvAndUvService pvAndUvService;
 
     @PostMapping("upload")
-    public R<String> uploadPromiseError(@RequestBody PromiseError promiseError) {
-        log.info("上传数据 promiseError: {}", JSONUtil.toJsonStr(promiseError));
+    public R<String> uploadPvAndUv(@RequestBody PvAndUv pvAndUv) {
+        log.info("上传数据 pvAndUv: {}", JSONUtil.toJsonStr(pvAndUv));
 
-        return promiseErrorService.uploadPromiseError(promiseError);
+        return pvAndUvService.uploadPvAndUv(pvAndUv);
     }
 
 }
+

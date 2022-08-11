@@ -28,6 +28,7 @@ public class UploadMapper {
         map.put(BLACK, BLACK_URL);
         map.put(TIMING, TIMING_URL);
         map.put(PAINT, PAINT_URL);
+        map.put(FIRST_INPUT_DELAY, FIRST_INPUT_DELAY_URL);
         map.put(LONG_TASK, LONG_TASK_URL);
         map.put(PV, PV_URL);
         map.put(UV, UV_URL);

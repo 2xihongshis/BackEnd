@@ -60,7 +60,7 @@ public class BlankScreen implements Serializable {
     /**
      * 屏幕分辨率
      */
-    private String viewpoint;
+    private String viewPoint;
 
     /**
      * 选择器

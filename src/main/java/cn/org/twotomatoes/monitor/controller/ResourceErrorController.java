@@ -2,8 +2,8 @@ package cn.org.twotomatoes.monitor.controller;
 
 import cn.hutool.json.JSONUtil;
 import cn.org.twotomatoes.monitor.dto.R;
-import cn.org.twotomatoes.monitor.entity.PromiseError;
-import cn.org.twotomatoes.monitor.service.PromiseErrorService;
+import cn.org.twotomatoes.monitor.entity.ResourceError;
+import cn.org.twotomatoes.monitor.service.ResourceErrorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,20 +15,19 @@ import javax.annotation.Resource;
 /**
  * @author HeYunjia
  */
-
 @Slf4j
 @RestController
-@RequestMapping("promise-error")
-public class PromiseErrorController {
+@RequestMapping("resource-error")
+public class ResourceErrorController {
 
     @Resource
-    private PromiseErrorService promiseErrorService;
+    private ResourceErrorService resourceErrorService;
 
     @PostMapping("upload")
-    public R<String> uploadPromiseError(@RequestBody PromiseError promiseError) {
-        log.info("上传数据 promiseError: {}", JSONUtil.toJsonStr(promiseError));
+    public R<String> uploadResourceError(@RequestBody ResourceError resourceError) {
+        log.info("上传数据 resourceError: {}", JSONUtil.toJsonStr(resourceError));
 
-        return promiseErrorService.uploadPromiseError(promiseError);
+        return resourceErrorService.uploadResourceError(resourceError);
     }
 
 }

@@ -2,8 +2,8 @@ package cn.org.twotomatoes.monitor.controller;
 
 import cn.hutool.json.JSONUtil;
 import cn.org.twotomatoes.monitor.dto.R;
-import cn.org.twotomatoes.monitor.entity.PromiseError;
-import cn.org.twotomatoes.monitor.service.PromiseErrorService;
+import cn.org.twotomatoes.monitor.entity.FirstInputDelay;
+import cn.org.twotomatoes.monitor.service.FirstInputDelayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,20 +15,19 @@ import javax.annotation.Resource;
 /**
  * @author HeYunjia
  */
-
 @Slf4j
 @RestController
-@RequestMapping("promise-error")
-public class PromiseErrorController {
+@RequestMapping("first-input-delay")
+public class FirstInputDelayController {
 
     @Resource
-    private PromiseErrorService promiseErrorService;
+    private FirstInputDelayService firstInputDelayService;
 
     @PostMapping("upload")
-    public R<String> uploadPromiseError(@RequestBody PromiseError promiseError) {
-        log.info("上传数据 promiseError: {}", JSONUtil.toJsonStr(promiseError));
+    public R<String> uploadFirstInputDelay(@RequestBody FirstInputDelay firstInputDelay) {
+        log.info("上传数据 firstInputDelay: {}", JSONUtil.toJsonStr(firstInputDelay));
 
-        return promiseErrorService.uploadPromiseError(promiseError);
+        return firstInputDelayService.uploadFirstInputDelay(firstInputDelay);
     }
 
 }

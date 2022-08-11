@@ -13,7 +13,7 @@
             <result property="userAgent" column="user_agent" jdbcType="VARCHAR"/>
             <result property="emptyPoints" column="empty_points" jdbcType="VARCHAR"/>
             <result property="screen" column="screen" jdbcType="VARCHAR"/>
-            <result property="viewpoint" column="viewPoint" jdbcType="VARCHAR"/>
+            <result property="viewPoint" column="view_point" jdbcType="VARCHAR"/>
             <result property="selector" column="selector" jdbcType="VARCHAR"/>
     </resultMap>
 

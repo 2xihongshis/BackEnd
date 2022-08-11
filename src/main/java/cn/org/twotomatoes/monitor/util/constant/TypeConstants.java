@@ -16,6 +16,7 @@ public class TypeConstants {
 
     public static final String TIMING = "timing";
     public static final String PAINT = "paint";
+    public static final String FIRST_INPUT_DELAY = "firstInputDelay";
     public static final String LONG_TASK = "longTask";
 
     public static final String PV = "pv";
