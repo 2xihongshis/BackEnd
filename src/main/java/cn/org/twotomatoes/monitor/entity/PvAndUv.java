@@ -22,9 +22,9 @@ public class PvAndUv implements Serializable {
     private Long id;
 
     /**
-     * 0 为 pv, 1 为 uv
+     * 页面 url
      */
-    private Byte type;
+    private String url;
 
     /**
      * 创建时间
@@ -32,9 +32,14 @@ public class PvAndUv implements Serializable {
     private Date time;
 
     /**
-     * 大小
+     * PV 大小
      */
-    private Long num;
+    private Long pvNum;
+
+    /**
+     * UV 大小
+     */
+    private Long uvNum;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
