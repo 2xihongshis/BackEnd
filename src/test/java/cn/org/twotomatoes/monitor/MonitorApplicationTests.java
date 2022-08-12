@@ -1,13 +1,17 @@
 package cn.org.twotomatoes.monitor;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.org.twotomatoes.monitor.entity.PvAndUv;
 import cn.org.twotomatoes.monitor.mapper.BlankScreenMapper;
 import cn.org.twotomatoes.monitor.service.BlankScreenService;
 import cn.org.twotomatoes.monitor.service.PvAndUvService;
 import cn.org.twotomatoes.monitor.util.CountUVUtil;
+import cn.org.twotomatoes.monitor.util.RedisMQ;
+import cn.org.twotomatoes.monitor.util.RedisMQResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -63,6 +67,7 @@ class MonitorApplicationTests {
 
     @Test
     void testPoll() {
+        @SuppressWarnings("unchecked")
         List<MapRecord<String, Object, Object>> read = stringRedisTemplate.opsForStream().read(
                 Consumer.from("group", "consumer"),
                 StreamReadOptions.empty().count(1).block(Duration.ofSeconds(2)),
@@ -78,6 +83,23 @@ class MonitorApplicationTests {
         String url = (String) read.get(0).getValue().get("url");
         System.out.println("url: " + url);
         stringRedisTemplate.opsForStream().acknowledge("testKey", "group", read.get(0).getId());
+    }
+
+    @Test
+    void testRedisMQ() {
+        String key = "TestKey";
+        String suffix = "testTest:";
+        RedisMQ.create(key);
+        for (int i = 0; i < 100; i++) {
+            RedisMQ.offer(key, suffix + i);
+        }
+        RedisMQResult message = RedisMQ.poll(key);
+        while (ObjectUtil.isNotNull(message)) {
+            System.out.println((String) message.getValue());
+            RedisMQ.ack(key, message);
+            message = RedisMQ.poll(key);
+        }
+        RedisMQ.delete(key);
     }
 
 }

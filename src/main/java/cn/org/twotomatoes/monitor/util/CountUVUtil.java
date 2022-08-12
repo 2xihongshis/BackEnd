@@ -40,7 +40,6 @@ public class CountUVUtil {
      * 记录到 redis 使用的 lua 脚本
      */
     private static final DefaultRedisScript<Long> COUNT_UV;
-    private static final String LUA_PATH = "lua/CountUV.lua";
 
     /**
      * 记录到 redis 使用的 key
@@ -48,7 +47,7 @@ public class CountUVUtil {
     private static String nowTime;
     static {
         COUNT_UV = new DefaultRedisScript<>();
-        COUNT_UV.setLocation(new ClassPathResource(LUA_PATH));
+        COUNT_UV.setLocation(new ClassPathResource(COUNT_UV_LUA_PATH));
         COUNT_UV.setResultType(Long.TYPE);
 
         nowTime = new SimpleDateFormat(PU_UV_KEY_PATTERN).format(new Date());
