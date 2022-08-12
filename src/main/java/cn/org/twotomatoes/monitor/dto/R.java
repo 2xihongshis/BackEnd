@@ -2,8 +2,8 @@ package cn.org.twotomatoes.monitor.dto;
 
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import static cn.org.twotomatoes.monitor.util.constant.RConstants.*;
 
 /**
  * 通用的返回结果类
@@ -14,7 +14,7 @@ import java.util.Map;
 public class R<T> {
 
     /**
-     * 编码：1成功，0和其它数字为失败
+     * 编码：1 成功, 0 失败, -1 异常
      */
     private Integer code;
 
@@ -28,29 +28,39 @@ public class R<T> {
      */
     private T data;
 
-    /**
-     * 动态数据
-     */
-    private Map<String, Object> map = new HashMap<>();
-
     public static <T> R<T> success(T object) {
         R<T> r = new R<>();
         r.data = object;
-        r.msg = "success";
-        r.code = 1;
+        r.msg = DEFAULT_SUCCESS;
+        r.code = SUCCESS_CODE;
         return r;
+    }
+
+    public static R<String> success() {
+        return R.success(DEFAULT_SUCCESS);
+    }
+
+    public static <T> R<T> fail(String msg) {
+        R<T> r = new R<>();
+        r.msg = msg;
+        r.code = FAIL_CODE;
+        return r;
+    }
+
+    public static <T> R<T> fail() {
+        return R.fail(DEFAULT_FAIL);
     }
 
     public static <T> R<T> error(String msg) {
         R<T> r = new R<>();
         r.msg = msg;
-        r.code = 0;
+        r.code = ERROR_CODE;
         return r;
     }
 
-    public R<T> add(String key, Object value) {
-        this.map.put(key, value);
-        return this;
+    public static <T> R<T> error() {
+        return R.error(DEFAULT_ERROR);
     }
+
 
 }

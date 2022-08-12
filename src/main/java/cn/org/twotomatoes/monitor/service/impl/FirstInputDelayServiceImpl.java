@@ -7,9 +7,6 @@ import cn.org.twotomatoes.monitor.service.FirstInputDelayService;
 import cn.org.twotomatoes.monitor.mapper.FirstInputDelayMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
-
 /**
  *
  */
@@ -19,7 +16,7 @@ public class FirstInputDelayServiceImpl extends ServiceImpl<FirstInputDelayMappe
 
     @Override
     public R<String> uploadFirstInputDelay(FirstInputDelay firstInputDelay) {
-        return save(firstInputDelay) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(firstInputDelay) ? R.success() : R.fail();
     }
 }
 

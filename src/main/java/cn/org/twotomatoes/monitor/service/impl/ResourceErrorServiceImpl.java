@@ -7,8 +7,6 @@ import cn.org.twotomatoes.monitor.service.ResourceErrorService;
 import cn.org.twotomatoes.monitor.mapper.ResourceErrorMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
 
 /**
  *
@@ -19,7 +17,7 @@ public class ResourceErrorServiceImpl extends ServiceImpl<ResourceErrorMapper, R
 
     @Override
     public R<String> uploadResourceError(ResourceError resourceError) {
-        return save(resourceError) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(resourceError) ? R.success() : R.fail();
     }
 }
 

@@ -7,9 +7,6 @@ import cn.org.twotomatoes.monitor.service.PromiseErrorService;
 import cn.org.twotomatoes.monitor.mapper.PromiseErrorMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
-
 /**
  *
  */
@@ -19,7 +16,7 @@ public class PromiseErrorServiceImpl extends ServiceImpl<PromiseErrorMapper, Pro
 
     @Override
     public R<String> uploadPromiseError(PromiseError promiseError) {
-        return save(promiseError) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(promiseError) ? R.success() : R.fail();
     }
 }
 

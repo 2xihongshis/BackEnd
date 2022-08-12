@@ -7,8 +7,6 @@ import cn.org.twotomatoes.monitor.service.StayTimeService;
 import cn.org.twotomatoes.monitor.mapper.StayTimeMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
 
 /**
  *
@@ -19,7 +17,7 @@ public class StayTimeServiceImpl extends ServiceImpl<StayTimeMapper, StayTime>
 
     @Override
     public R<String> uploadStayTime(StayTime stayTime) {
-        return save(stayTime) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(stayTime) ? R.success() : R.fail();
     }
 }
 

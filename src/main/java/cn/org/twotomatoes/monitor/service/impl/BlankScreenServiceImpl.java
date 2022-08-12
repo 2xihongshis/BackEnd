@@ -7,9 +7,6 @@ import cn.org.twotomatoes.monitor.service.BlankScreenService;
 import cn.org.twotomatoes.monitor.mapper.BlankScreenMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
-
 /**
  *
  */
@@ -19,7 +16,7 @@ public class BlankScreenServiceImpl extends ServiceImpl<BlankScreenMapper, Blank
 
     @Override
     public R<String> uploadBlankScreen(BlankScreen blankScreen) {
-        return save(blankScreen) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(blankScreen) ? R.success() : R.fail();
     }
 }
 

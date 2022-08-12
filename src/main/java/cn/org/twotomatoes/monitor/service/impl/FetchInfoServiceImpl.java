@@ -7,9 +7,6 @@ import cn.org.twotomatoes.monitor.service.FetchInfoService;
 import cn.org.twotomatoes.monitor.mapper.FetchInfoMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
-
 /**
  *
  */
@@ -19,7 +16,7 @@ public class FetchInfoServiceImpl extends ServiceImpl<FetchInfoMapper, FetchInfo
 
     @Override
     public R<String> uploadFetchInfo(FetchInfo fetchInfo) {
-        return save(fetchInfo) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(fetchInfo) ? R.success() : R.fail();
     }
 }
 

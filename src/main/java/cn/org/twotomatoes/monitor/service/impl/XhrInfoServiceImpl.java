@@ -7,9 +7,6 @@ import cn.org.twotomatoes.monitor.service.XhrInfoService;
 import cn.org.twotomatoes.monitor.mapper.XhrInfoMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
-
 /**
  *
  */
@@ -19,7 +16,7 @@ public class XhrInfoServiceImpl extends ServiceImpl<XhrInfoMapper, XhrInfo>
 
     @Override
     public R<String> uploadXhrInfo(XhrInfo xhrInfo) {
-        return save(xhrInfo) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(xhrInfo) ? R.success() : R.fail();
     }
 }
 

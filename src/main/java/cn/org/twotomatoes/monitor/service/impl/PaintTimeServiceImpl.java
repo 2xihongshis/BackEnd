@@ -7,9 +7,6 @@ import cn.org.twotomatoes.monitor.service.PaintTimeService;
 import cn.org.twotomatoes.monitor.mapper.PaintTimeMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
-
 /**
  *
  */
@@ -19,7 +16,7 @@ public class PaintTimeServiceImpl extends ServiceImpl<PaintTimeMapper, PaintTime
 
     @Override
     public R<String> uploadPaintTime(PaintTime paintTime) {
-        return save(paintTime) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(paintTime) ? R.success() : R.fail();
     }
 }
 

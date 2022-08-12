@@ -7,8 +7,6 @@ import cn.org.twotomatoes.monitor.service.VisitInfoService;
 import cn.org.twotomatoes.monitor.mapper.VisitInfoMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
 
 /**
  *
@@ -19,7 +17,7 @@ public class VisitInfoServiceImpl extends ServiceImpl<VisitInfoMapper, VisitInfo
 
     @Override
     public R<String> uploadVisitInfo(VisitInfo visitInfo) {
-        return save(visitInfo) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(visitInfo) ? R.success() : R.fail();
     }
 }
 

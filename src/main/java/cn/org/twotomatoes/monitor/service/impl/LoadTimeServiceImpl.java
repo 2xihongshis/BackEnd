@@ -7,9 +7,6 @@ import cn.org.twotomatoes.monitor.service.LoadTimeService;
 import cn.org.twotomatoes.monitor.mapper.LoadTimeMapper;
 import org.springframework.stereotype.Service;
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_FAIL;
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.UPLOAD_SUCCESS;
-
 /**
  *
  */
@@ -19,7 +16,7 @@ public class LoadTimeServiceImpl extends ServiceImpl<LoadTimeMapper, LoadTime>
 
     @Override
     public R<String> uploadLoadTime(LoadTime loadTime) {
-        return save(loadTime) ? R.success(UPLOAD_SUCCESS) : R.error(UPLOAD_FAIL);
+        return save(loadTime) ? R.success() : R.fail();
 
     }
 }
