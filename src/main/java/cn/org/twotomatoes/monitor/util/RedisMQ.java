@@ -1,5 +1,6 @@
 package cn.org.twotomatoes.monitor.util;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -32,6 +33,25 @@ public class RedisMQ {
      */
     public static void create(String key) {
         stringRedisTemplate.opsForStream().createGroup(key, MQ_GROUP_NAME);
+    }
+
+    /**
+     * 创建一个 id 为 key 的消息队列, 当且仅当不存在 id 为 key 的消息队列
+     *
+     * @param key 消息队列的唯一标识
+     */
+    public static void createIfAbsent(String key) {
+        if (!exist(key)) create(key);
+    }
+
+    /**
+     * 判断 id 为 key 的队列是否存在
+     *
+     * @param key 消息队列的 id
+     * @return 存在 true, 不存在 false
+     */
+    public static boolean exist(String key) {
+        return BooleanUtil.isTrue(stringRedisTemplate.hasKey(key));
     }
 
     /**

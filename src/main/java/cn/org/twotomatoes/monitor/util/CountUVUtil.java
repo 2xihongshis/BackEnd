@@ -29,14 +29,6 @@ public class CountUVUtil {
     }
 
     /**
-     * 记录的全部 url
-     */
-    private static final HashSet<String> set = new HashSet<>();
-    public static HashSet<String> getURLSet() {
-        return set;
-    }
-
-    /**
      * 记录到 redis 使用的 lua 脚本
      */
     private static final DefaultRedisScript<Long> COUNT_UV;
@@ -45,11 +37,17 @@ public class CountUVUtil {
      * 记录到 redis 使用的 key
      */
     private static String nowTime;
+
+    /**
+     * 去重 url 的 set 集合
+     */
+    private static HashSet<String> set;
     static {
         COUNT_UV = new DefaultRedisScript<>();
         COUNT_UV.setLocation(new ClassPathResource(COUNT_UV_LUA_PATH));
         COUNT_UV.setResultType(Long.TYPE);
 
+        set = new HashSet<>();
         nowTime = new SimpleDateFormat(PU_UV_KEY_PATTERN).format(new Date());
     }
 
@@ -61,6 +59,7 @@ public class CountUVUtil {
     public static String updateTime() {
         String oldTime = nowTime;
         nowTime = new SimpleDateFormat(PU_UV_KEY_PATTERN).format(new Date());
+        set = new HashSet<>();
         return oldTime;
     }
 
@@ -71,16 +70,19 @@ public class CountUVUtil {
      * @param ip 客户端 ip
      */
     public static void addRecord(String url, String ip) {
-        set.add(url);
-        String pvKey = PV_KEY + nowTime + url;
-        String uvKey = UV_KEY + nowTime + url;
+        String mqKey = URL_MQ_KEY_PREFIX + nowTime;
+        String pvKey = PV_NUM_KEY_PREFIX + nowTime + url;
+        String uvKey = UV_NUM_KEY_PREFIX + nowTime + url;
+
+        RedisMQ.createIfAbsent(mqKey);
+        if (set.add(url)) RedisMQ.offer(mqKey, url);
         stringRedisTemplate.execute(COUNT_UV, Arrays.asList(pvKey, uvKey), ip);
     }
 
     public static Long countPV(String time, String url) {
         String s = stringRedisTemplate
                 .opsForValue()
-                .get(PV_KEY + time + url);
+                .get(PV_NUM_KEY_PREFIX + time + url);
 
         if (StrUtil.isBlank(s)) return 0L;
         return Long.parseLong(s);
@@ -89,12 +91,12 @@ public class CountUVUtil {
     public static Long countUV(String time, String url) {
         return stringRedisTemplate
                 .opsForHyperLogLog()
-                .size(UV_KEY + time + url);
+                .size(UV_NUM_KEY_PREFIX + time + url);
     }
 
-    public static void deleteKey(String url, String time) {
+    public static void deleteKey(String time, String url) {
         stringRedisTemplate.delete(
-                Arrays.asList(PV_KEY + url + time,
-                              UV_KEY + url + time));
+                Arrays.asList(PV_NUM_KEY_PREFIX + time + url,
+                              UV_NUM_KEY_PREFIX + time + url));
     }
 }

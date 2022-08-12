@@ -1,5 +1,6 @@
 package cn.org.twotomatoes.monitor.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.org.twotomatoes.monitor.entity.PvAndUv;
 import cn.org.twotomatoes.monitor.service.PvAndUvService;
 import lombok.SneakyThrows;
@@ -9,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.Set;
 
 import static cn.org.twotomatoes.monitor.util.constant.RedisConstants.PU_UV_KEY_PATTERN;
+import static cn.org.twotomatoes.monitor.util.constant.RedisConstants.URL_MQ_KEY_PREFIX;
 
 /**
  * @author HeYunjia
@@ -31,26 +32,28 @@ public class ScheduleTask {
     @SneakyThrows
     @Scheduled(cron = "0 0 0/1 * * *")
     private void backupUV() {
-        Set<String> set = CountUVUtil.getURLSet();
-        String oldTime = CountUVUtil.updateTime();
-        for (String url : set) {
-            Long pv = CountUVUtil.countPV(oldTime, url);
-            if (pv == 0) continue;
-            Long uv = CountUVUtil.countUV(oldTime, url);
-            log.info("保存 pv uv 数据:\n" +
-                    "url: {}\n" +
-                    "oldTime: {}, pv: {}, uv: {}", url, oldTime, pv, uv);
+        log.info("backupUV 执行");
+        String time = CountUVUtil.updateTime();
+        String key = URL_MQ_KEY_PREFIX + time;
 
-            PvAndUv pu = new PvAndUv();
-            pu.setUrl(url);
-            pu.setPvNum(pv);
-            pu.setUvNum(uv);
-            pu.setTime(new SimpleDateFormat(PU_UV_KEY_PATTERN).parse(oldTime));
+        RedisMQ.createIfAbsent(key);
+        RedisMQResult message = RedisMQ.poll(key);
+        while (ObjectUtil.isNotNull(message)) {
+            String url = (String) message.getValue();
 
-            pvAndUvService.save(pu);
+            PvAndUv pvAndUv = new PvAndUv();
+            pvAndUv.setTime(new SimpleDateFormat(PU_UV_KEY_PATTERN).parse(time));
+            pvAndUv.setPvNum(CountUVUtil.countPV(time, url));
+            pvAndUv.setUvNum(CountUVUtil.countUV(time, url));
+            pvAndUv.setUrl(url);
 
-            CountUVUtil.deleteKey(oldTime, url);
+            pvAndUvService.save(pvAndUv);
+
+            CountUVUtil.deleteKey(time, url);
+
+            RedisMQ.ack(key, message);
+            message = RedisMQ.poll(key);
         }
-
+        RedisMQ.delete(key);
     }
 }
