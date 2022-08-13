@@ -13,7 +13,4 @@ public class RedisConstants {
 
     public static final String URL_MQ_KEY_PREFIX = "url:";
 
-    public static final String MQ_GROUP_NAME = "group";
-    public static final String MQ_CONSUMER_NAME = "consumer";
-    public static final String MQ_MAP_KEY = "key";
 }

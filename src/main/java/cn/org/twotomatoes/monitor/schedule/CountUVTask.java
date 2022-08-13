@@ -1,11 +1,11 @@
 package cn.org.twotomatoes.monitor.schedule;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.org.twotomatoes.monitor.common.RedisMQ;
+import cn.org.twotomatoes.monitor.common.RedisMQResult;
 import cn.org.twotomatoes.monitor.entity.PvAndUv;
 import cn.org.twotomatoes.monitor.helper.CountUVHelper;
 import cn.org.twotomatoes.monitor.service.PvAndUvService;
-import cn.org.twotomatoes.monitor.common.RedisMQ;
-import cn.org.twotomatoes.monitor.common.RedisMQResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,9 +18,10 @@ import static cn.org.twotomatoes.monitor.constant.RedisConstants.PU_UV_KEY_PATTE
 import static cn.org.twotomatoes.monitor.constant.RedisConstants.URL_MQ_KEY_PREFIX;
 
 /**
+ * 将 redis 中 pv uv 数据备份到数据库
+ *
  * @author HeYunjia
  */
-
 @Slf4j
 @Component
 public class CountUVTask {
@@ -35,14 +36,14 @@ public class CountUVTask {
     @SneakyThrows
     @Scheduled(cron = "0 0 0/1 * * *")
     private void backupUV() {
-        log.info("backupUV 执行");
         String time = CountUVHelper.updateTime();
+        log.info("backupUV 执行, 记录 time: {}", time);
         String key = URL_MQ_KEY_PREFIX + time;
 
-        RedisMQ.createIfAbsent(key);
-        RedisMQResult message = RedisMQ.poll(key);
+        RedisMQ<String> mq = RedisMQ.getMQByKey(key);
+        RedisMQResult<String> message = mq.poll();
         while (ObjectUtil.isNotNull(message)) {
-            String url = (String) message.getValue();
+            String url = message.getValue();
 
             PvAndUv pvAndUv = new PvAndUv();
             pvAndUv.setTime(new SimpleDateFormat(PU_UV_KEY_PATTERN).parse(time));
@@ -54,9 +55,9 @@ public class CountUVTask {
 
             CountUVHelper.deleteKey(time, url);
 
-            RedisMQ.ack(key, message);
-            message = RedisMQ.poll(key);
+            mq.ack(message);
+            message = mq.poll();
         }
-        RedisMQ.delete(key);
+        mq.delete();
     }
 }

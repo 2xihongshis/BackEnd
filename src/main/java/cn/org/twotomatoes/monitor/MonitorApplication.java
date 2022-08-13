@@ -1,5 +1,8 @@
 package cn.org.twotomatoes.monitor;
 
+import cn.org.twotomatoes.monitor.common.RedisMQ;
+import cn.org.twotomatoes.monitor.common.TemplateHolder;
+import cn.org.twotomatoes.monitor.helper.CountUVHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -21,6 +24,9 @@ public class MonitorApplication {
     public static void main(String[] args) {
         SpringApplication.run(MonitorApplication.class, args);
         log.info("******** 项目启动成功 ********");
+
+        RedisMQ.setStringRedisTemplate(TemplateHolder.get());
+        CountUVHelper.setStringRedisTemplate(TemplateHolder.get());
     }
 
 }

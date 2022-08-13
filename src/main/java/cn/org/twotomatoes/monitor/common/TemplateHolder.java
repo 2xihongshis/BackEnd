@@ -1,5 +1,6 @@
 package cn.org.twotomatoes.monitor.common;
 
+import cn.org.twotomatoes.monitor.helper.CountUVHelper;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +13,14 @@ import javax.annotation.Resource;
 @Component
 public class TemplateHolder {
 
-    private StringRedisTemplate stringRedisTemplate;
+    private static StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
+        TemplateHolder.stringRedisTemplate = stringRedisTemplate;
     }
 
-    public StringRedisTemplate get() {
+    public static StringRedisTemplate get() {
         return stringRedisTemplate;
     }
 }
