@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.service.impl;
 
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.helper.FilterEntityHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.org.twotomatoes.monitor.entity.ResourceError;
 import cn.org.twotomatoes.monitor.service.ResourceErrorService;
@@ -17,7 +18,9 @@ public class ResourceErrorServiceImpl extends ServiceImpl<ResourceErrorMapper, R
 
     @Override
     public R<String> uploadResourceError(ResourceError resourceError) {
-        return save(resourceError) ? R.success() : R.fail();
+        return save(FilterEntityHelper.format(resourceError))
+                ? R.success()
+                : R.fail();
     }
 }
 

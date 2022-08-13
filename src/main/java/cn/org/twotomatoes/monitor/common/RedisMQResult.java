@@ -1,4 +1,4 @@
-package cn.org.twotomatoes.monitor.util;
+package cn.org.twotomatoes.monitor.common;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.stream.RecordId;
 
 import java.util.List;
 
-import static cn.org.twotomatoes.monitor.util.constant.RedisConstants.MQ_MAP_KEY;
+import static cn.org.twotomatoes.monitor.constant.RedisConstants.MQ_MAP_KEY;
 
 /**
  * 统一队列的返回结果, 包含其内容和标识其内容的唯一 id

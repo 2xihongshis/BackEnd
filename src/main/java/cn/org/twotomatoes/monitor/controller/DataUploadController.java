@@ -1,10 +1,9 @@
 package cn.org.twotomatoes.monitor.controller;
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.org.twotomatoes.monitor.dto.R;
-import cn.org.twotomatoes.monitor.util.MyRequestWrapper;
-import cn.org.twotomatoes.monitor.util.UploadMapper;
+import cn.org.twotomatoes.monitor.common.MyRequestWrapper;
+import cn.org.twotomatoes.monitor.helper.UploadForwardHelper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -36,7 +35,7 @@ public class DataUploadController {
         String type = (String) new JSONObject(myRequest.getBody()).get("type");
         log.info("type 类型为: {}", type);
 
-        request.getRequestDispatcher(UploadMapper.getURL(type))
+        request.getRequestDispatcher(UploadForwardHelper.getURL(type))
                 .forward(myRequest, response);
     }
 

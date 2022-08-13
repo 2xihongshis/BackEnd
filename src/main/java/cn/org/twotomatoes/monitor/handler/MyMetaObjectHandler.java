@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import static cn.org.twotomatoes.monitor.util.constant.HolderConstants.IP_HOLDER;
-import static cn.org.twotomatoes.monitor.util.constant.MysqlFieldConstants.IP;
+import static cn.org.twotomatoes.monitor.util.Holder.IP_HOLDER;
+import static cn.org.twotomatoes.monitor.constant.MysqlFieldConstants.IP;
 
 /**
  * 自动填充 ip 地址

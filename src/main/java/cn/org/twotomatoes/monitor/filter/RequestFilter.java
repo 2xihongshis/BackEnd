@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static cn.org.twotomatoes.monitor.util.constant.HolderConstants.IP_HOLDER;
+import static cn.org.twotomatoes.monitor.util.Holder.IP_HOLDER;
 
 
 /**

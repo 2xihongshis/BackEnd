@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.service.impl;
 
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.helper.FilterEntityHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.org.twotomatoes.monitor.entity.StayTime;
 import cn.org.twotomatoes.monitor.service.StayTimeService;
@@ -17,7 +18,9 @@ public class StayTimeServiceImpl extends ServiceImpl<StayTimeMapper, StayTime>
 
     @Override
     public R<String> uploadStayTime(StayTime stayTime) {
-        return save(stayTime) ? R.success() : R.fail();
+        return save(FilterEntityHelper.format(stayTime))
+                ? R.success()
+                : R.fail();
     }
 }
 

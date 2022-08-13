@@ -1,4 +1,4 @@
-package cn.org.twotomatoes.monitor.util;
+package cn.org.twotomatoes.monitor.common;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.HashMap;
 
-import static cn.org.twotomatoes.monitor.util.constant.RedisConstants.*;
+import static cn.org.twotomatoes.monitor.constant.RedisConstants.*;
 
 /**
  * @author HeYunjia

@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.service.impl;
 
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.helper.FilterEntityHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.org.twotomatoes.monitor.entity.PaintTime;
 import cn.org.twotomatoes.monitor.service.PaintTimeService;
@@ -16,7 +17,9 @@ public class PaintTimeServiceImpl extends ServiceImpl<PaintTimeMapper, PaintTime
 
     @Override
     public R<String> uploadPaintTime(PaintTime paintTime) {
-        return save(paintTime) ? R.success() : R.fail();
+        return save(FilterEntityHelper.format(paintTime))
+                ? R.success()
+                : R.fail();
     }
 }
 

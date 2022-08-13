@@ -1,4 +1,4 @@
-package cn.org.twotomatoes.monitor.util.constant;
+package cn.org.twotomatoes.monitor.constant;
 
 /**
  * @author HeYunjia

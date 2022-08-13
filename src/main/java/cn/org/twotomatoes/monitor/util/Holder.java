@@ -3,12 +3,12 @@ package cn.org.twotomatoes.monitor.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import static cn.org.twotomatoes.monitor.util.constant.HolderConstants.*;
-
 /**
  * @author HeYunjia
  */
 public class Holder {
+
+    public static final String IP_HOLDER = "ipHolder";
 
     public static void set(String key, String value) {
         map.get(key).set(value);

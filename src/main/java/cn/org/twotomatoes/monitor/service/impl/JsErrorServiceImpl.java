@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.service.impl;
 
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.helper.FilterEntityHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.org.twotomatoes.monitor.entity.JsError;
 import cn.org.twotomatoes.monitor.service.JsErrorService;
@@ -16,7 +17,9 @@ public class JsErrorServiceImpl extends ServiceImpl<JsErrorMapper, JsError>
 
     @Override
     public R<String> uploadJsError(JsError jsError) {
-        return save(jsError) ? R.success() : R.fail();
+        return save(FilterEntityHelper.format(jsError))
+                ? R.success()
+                : R.fail();
     }
 }
 

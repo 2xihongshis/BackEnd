@@ -5,9 +5,9 @@ import cn.org.twotomatoes.monitor.entity.PvAndUv;
 import cn.org.twotomatoes.monitor.mapper.BlankScreenMapper;
 import cn.org.twotomatoes.monitor.service.BlankScreenService;
 import cn.org.twotomatoes.monitor.service.PvAndUvService;
-import cn.org.twotomatoes.monitor.util.CountUVUtil;
-import cn.org.twotomatoes.monitor.util.RedisMQ;
-import cn.org.twotomatoes.monitor.util.RedisMQResult;
+import cn.org.twotomatoes.monitor.helper.CountUVHelper;
+import cn.org.twotomatoes.monitor.common.RedisMQ;
+import cn.org.twotomatoes.monitor.common.RedisMQResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 
 import java.text.SimpleDateFormat;
 
-import static cn.org.twotomatoes.monitor.util.constant.RedisConstants.*;
+import static cn.org.twotomatoes.monitor.constant.RedisConstants.*;
 
 @Slf4j
 @SpringBootTest
@@ -72,8 +72,8 @@ class MonitorApplicationTests {
             String url = (String) message.getValue();
             PvAndUv pvAndUv = new PvAndUv();
             pvAndUv.setTime(new SimpleDateFormat(PU_UV_KEY_PATTERN).parse(time));
-            pvAndUv.setPvNum(CountUVUtil.countPV(time, url));
-            pvAndUv.setUvNum(CountUVUtil.countUV(time, url));
+            pvAndUv.setPvNum(CountUVHelper.countPV(time, url));
+            pvAndUv.setUvNum(CountUVHelper.countUV(time, url));
             pvAndUv.setUrl(url);
             pvAndUvService.save(pvAndUv);
 

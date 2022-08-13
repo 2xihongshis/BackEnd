@@ -1,9 +1,9 @@
-package cn.org.twotomatoes.monitor.util;
+package cn.org.twotomatoes.monitor.helper;
 
 import java.util.HashMap;
 
-import static cn.org.twotomatoes.monitor.util.constant.TypeConstants.*;
-import static cn.org.twotomatoes.monitor.util.constant.ForwardConstants.*;
+import static cn.org.twotomatoes.monitor.constant.TypeConstants.*;
+import static cn.org.twotomatoes.monitor.constant.ForwardConstants.*;
 
 
 /**
@@ -11,7 +11,7 @@ import static cn.org.twotomatoes.monitor.util.constant.ForwardConstants.*;
  *
  * @author HeYunjia
  */
-public class UploadMapper {
+public class UploadForwardHelper {
 
     public static String getURL(String type) {
         return map.getOrDefault(type, DEFAULT);

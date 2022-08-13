@@ -3,7 +3,7 @@ package cn.org.twotomatoes.monitor.dto;
 import lombok.Data;
 
 
-import static cn.org.twotomatoes.monitor.util.constant.RConstants.*;
+import static cn.org.twotomatoes.monitor.constant.RConstants.*;
 
 /**
  * 通用的返回结果类

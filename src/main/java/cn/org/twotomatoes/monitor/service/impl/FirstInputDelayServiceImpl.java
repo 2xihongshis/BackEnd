@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.service.impl;
 
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.helper.FilterEntityHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.org.twotomatoes.monitor.entity.FirstInputDelay;
 import cn.org.twotomatoes.monitor.service.FirstInputDelayService;
@@ -16,7 +17,9 @@ public class FirstInputDelayServiceImpl extends ServiceImpl<FirstInputDelayMappe
 
     @Override
     public R<String> uploadFirstInputDelay(FirstInputDelay firstInputDelay) {
-        return save(firstInputDelay) ? R.success() : R.fail();
+        return save(FilterEntityHelper.format(firstInputDelay))
+                ? R.success()
+                : R.fail();
     }
 }
 

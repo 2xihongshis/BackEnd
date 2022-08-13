@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.service.impl;
 
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.helper.FilterEntityHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.org.twotomatoes.monitor.entity.BlankScreen;
 import cn.org.twotomatoes.monitor.service.BlankScreenService;
@@ -16,7 +17,9 @@ public class BlankScreenServiceImpl extends ServiceImpl<BlankScreenMapper, Blank
 
     @Override
     public R<String> uploadBlankScreen(BlankScreen blankScreen) {
-        return save(blankScreen) ? R.success() : R.fail();
+        return save(FilterEntityHelper.format(blankScreen))
+                ? R.success()
+                : R.fail();
     }
 }
 

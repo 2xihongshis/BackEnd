@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.service.impl;
 
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.helper.FilterEntityHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.org.twotomatoes.monitor.entity.XhrInfo;
 import cn.org.twotomatoes.monitor.service.XhrInfoService;
@@ -16,7 +17,9 @@ public class XhrInfoServiceImpl extends ServiceImpl<XhrInfoMapper, XhrInfo>
 
     @Override
     public R<String> uploadXhrInfo(XhrInfo xhrInfo) {
-        return save(xhrInfo) ? R.success() : R.fail();
+        return save(FilterEntityHelper.format(xhrInfo))
+                ? R.success()
+                : R.fail();
     }
 }
 

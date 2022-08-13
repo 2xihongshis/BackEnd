@@ -1,6 +1,7 @@
-package cn.org.twotomatoes.monitor.util;
+package cn.org.twotomatoes.monitor.helper;
 
 import cn.hutool.core.util.StrUtil;
+import cn.org.twotomatoes.monitor.common.RedisMQ;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -12,20 +13,20 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
-import static cn.org.twotomatoes.monitor.util.constant.RedisConstants.*;
+import static cn.org.twotomatoes.monitor.constant.RedisConstants.*;
 
 /**
  * @author HeYunjia
  */
 
 @Component
-public class CountUVUtil {
+public class CountUVHelper {
 
     private static StringRedisTemplate stringRedisTemplate;
 
     @Resource
     public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
-        CountUVUtil.stringRedisTemplate = stringRedisTemplate;
+        CountUVHelper.stringRedisTemplate = stringRedisTemplate;
     }
 
     /**
