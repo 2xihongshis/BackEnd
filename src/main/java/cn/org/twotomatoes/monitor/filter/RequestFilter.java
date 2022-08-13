@@ -1,6 +1,6 @@
 package cn.org.twotomatoes.monitor.filter;
 
-import cn.org.twotomatoes.monitor.util.IpUtils;
+import cn.org.twotomatoes.monitor.util.IPUtils;
 import cn.org.twotomatoes.monitor.util.Holder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +31,7 @@ public class RequestFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String ipAddress = IpUtils.getIpAddress(request);
+        String ipAddress = IPUtils.getIpAddress(request);
         Holder.set(IP_HOLDER, ipAddress);
         log.info("ip 地址为 {} 的客户端上传数据", ipAddress);
 

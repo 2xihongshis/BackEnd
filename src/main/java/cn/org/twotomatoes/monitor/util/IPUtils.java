@@ -14,7 +14,7 @@ import java.util.Enumeration;
  * @author 蕃薯耀
  */
 
-public class IpUtils {
+public class IPUtils {
 
     /**
      * 获取 ip 地址要使用的请求头
