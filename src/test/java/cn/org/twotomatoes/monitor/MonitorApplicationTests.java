@@ -1,13 +1,14 @@
 package cn.org.twotomatoes.monitor;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
+import cn.org.twotomatoes.monitor.common.*;
+import cn.org.twotomatoes.monitor.dto.TestEntity;
 import cn.org.twotomatoes.monitor.entity.PvAndUv;
 import cn.org.twotomatoes.monitor.mapper.BlankScreenMapper;
 import cn.org.twotomatoes.monitor.service.BlankScreenService;
 import cn.org.twotomatoes.monitor.service.PvAndUvService;
 import cn.org.twotomatoes.monitor.helper.CountUVHelper;
-import cn.org.twotomatoes.monitor.common.RedisMQ;
-import cn.org.twotomatoes.monitor.common.RedisMQResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import javax.annotation.Resource;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static cn.org.twotomatoes.monitor.constant.RedisConstants.*;
 
@@ -83,4 +85,43 @@ class MonitorApplicationTests {
         RedisMQ.delete(key);
     }
 
+
+    @Resource
+    TemplateHolder templateHolder;
+
+    @Test
+    void testRedisMQNew() {
+        String key = "TestKey";
+        RedisMQNew.setStringRedisTemplate(templateHolder.get());
+        RedisMQNew<TestEntity> mq = RedisMQNew.create(key, TestEntity.class);
+        Class<?> valueType = RedisMQNew.getValueType(key);
+        System.out.println(valueType);
+        TestEntity a = new TestEntity(1, 1);
+        TestEntity b = new TestEntity(2, 2);
+        mq.offer(a);
+        mq.offer(b);
+
+        RedisMQResultNew<TestEntity> message = mq.poll();
+        while (ObjectUtil.isNotNull(message)) {
+            System.out.println(message);
+            mq.ack(message);
+            message = mq.poll();
+        }
+        mq.delete();
+    }
+
+    @Test
+    @SneakyThrows
+    void testClass() {
+//        Class<TestEntity> testEntityClass = TestEntity.class;
+        Class<Object> className = Object.class;
+        System.out.println(className.toString());
+        String name = className.getName();
+        System.out.println("name: " + name);
+        String s = className.toString().substring(6);
+        System.out.println(s);
+        Class<?> aClass = Class.forName(s);
+        System.out.println(aClass);
+    }
 }
+
