@@ -2,6 +2,7 @@ package cn.org.twotomatoes.monitor.common;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.SneakyThrows;
 import org.springframework.data.redis.connection.stream.Consumer;
@@ -36,11 +37,11 @@ public class RedisMQ<T> {
      * @param key 消息队列的唯一标识
      * @param valueType 存放的数据类型
      */
-    public static <T> RedisMQ<T> create(String key, Class<T> valueType) {
+    public static <T> RedisMQ<T> build(String key, Class<T> valueType) {
         template.opsForStream().createGroup(key + MQ_KEY_SUFFIX, MQ_GROUP_NAME);
         template.opsForValue().set(key + MQ_OBJECT_TYPE_SUFFIX, valueType.getName());
 
-        return new RedisMQ<T>(key, valueType);
+        return new RedisMQ<>(key, valueType);
     }
 
     /**
@@ -48,10 +49,20 @@ public class RedisMQ<T> {
      *
      * @param key 消息队列的唯一标识
      */
-    public static <T> RedisMQ<T> createIfAbsent(String key, Class<T> valueType) {
-        if (!exist(key)) create(key, valueType);
+    public static <T> RedisMQ<T> buildIfAbsent(String key, Class<T> valueType) {
+        if (!exist(key)) return build(key, valueType);
 
-        return new RedisMQ<T>(key, valueType);
+        return new RedisMQ<>(key, valueType);
+    }
+
+    /**
+     * 重建消息队列
+     */
+    public void reBuild() {
+        delete();
+
+        template.opsForStream().createGroup(mpKey, MQ_GROUP_NAME);
+        template.opsForValue().set(typeKey, valueType.getName());
     }
 
     /**
@@ -62,12 +73,22 @@ public class RedisMQ<T> {
      */
     @SuppressWarnings("unchecked")
     public static <T> RedisMQ<T> getMQByKey(String key) {
-        return new RedisMQ<>(key, (Class<T>) getValueType(key));
+        Class<?> valueType = getValueType(key);
+        if (valueType == null) return null;
+
+        return new RedisMQ<>(key, (Class<T>) valueType);
     }
 
+    /**
+     * 获取 id 为 key 的队列的 value 类型
+     *
+     * @param key 队列的 id
+     * @return 队列的 value 类型
+     */
     @SneakyThrows
     public static Class<?> getValueType(String key) {
         String valueType = template.opsForValue().get(key + MQ_OBJECT_TYPE_SUFFIX);
+        if (StrUtil.isBlank(valueType)) return null;
 
         return Class.forName(valueType);
     }
@@ -88,6 +109,8 @@ public class RedisMQ<T> {
      * @param data 要存入消息队列的数据
      */
     public void offer(T data) {
+        if (!exist(mpKey)) reBuild();
+
         HashMap<String, String> map = new HashMap<>();
         map.put(MQ_MAP_KEY, JSONUtil.toJsonStr(data));
         template.opsForStream().add(mpKey, map);

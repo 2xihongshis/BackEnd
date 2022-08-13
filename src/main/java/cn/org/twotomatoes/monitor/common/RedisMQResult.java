@@ -4,8 +4,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.data.redis.connection.stream.MapRecord;
 import org.springframework.data.redis.connection.stream.RecordId;
 

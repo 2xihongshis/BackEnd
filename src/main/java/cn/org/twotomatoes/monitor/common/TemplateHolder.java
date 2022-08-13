@@ -4,6 +4,7 @@ import cn.org.twotomatoes.monitor.helper.CountUVHelper;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
@@ -20,7 +21,9 @@ public class TemplateHolder {
         TemplateHolder.stringRedisTemplate = stringRedisTemplate;
     }
 
-    public static StringRedisTemplate get() {
-        return stringRedisTemplate;
+    @PostConstruct
+    private static void init() {
+        RedisMQ.setStringRedisTemplate(stringRedisTemplate);
+        CountUVHelper.setStringRedisTemplate(stringRedisTemplate);
     }
 }
