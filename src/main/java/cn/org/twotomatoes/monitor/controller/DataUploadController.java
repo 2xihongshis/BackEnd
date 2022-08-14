@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Controller
+@CrossOrigin("*")
 @RequestMapping("upload")
 public class DataUploadController {
 
