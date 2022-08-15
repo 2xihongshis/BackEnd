@@ -34,11 +34,11 @@ public class CountUVTask {
      * 每一小时执行一次, 在每个零分执行
      */
     @SneakyThrows
-    @Scheduled(cron = "0 10 0/1 * * *")
+    @Scheduled(cron = "0 0 0/1 * * *")
     private void backupUV() {
         String time = CountUVHelper.updateTime();
         log.info("backupUV 执行, 记录 time: {}", time);
-        String key = COUNT_UV_KEY_PREFIX + time + URL_MQ_KEY_PREFIX;
+        String key = COUNT_UV_KEY_PREFIX + time + URL_MQ_KEY;
 
         RedisMQ<String> mq = RedisMQ.getMQByKey(key);
         if (mq == null) return;

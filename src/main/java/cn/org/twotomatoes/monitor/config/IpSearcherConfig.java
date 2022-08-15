@@ -15,9 +15,11 @@ import java.io.InputStream;
 @Configuration
 public class IpSearcherConfig {
 
+    private static final String DB_PATH = "xdb/ip2region.xdb";
+
     @Bean
     public Searcher searcher() throws IOException {
-        InputStream dbStream = new ClassPathResource("xdb/ip2region.xdb").getInputStream();
+        InputStream dbStream = new ClassPathResource(DB_PATH).getInputStream();
         byte[] data = new byte[dbStream.available()];
 
         int readCount = 0;

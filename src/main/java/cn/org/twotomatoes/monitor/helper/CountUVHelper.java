@@ -32,9 +32,9 @@ public class CountUVHelper {
         nowTime = new SimpleDateFormat(PU_UV_KEY_PATTERN).format(new Date());
         set = new HashSet<>();
 
-        pvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + PV_NUM_KEY_PREFIX;
-        uvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + UV_NUM_KEY_PREFIX;
-        mqKey = COUNT_UV_KEY_PREFIX + nowTime + URL_MQ_KEY_PREFIX;
+        pvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + PV_NUM_KEY;
+        uvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + UV_NUM_KEY;
+        mqKey = COUNT_UV_KEY_PREFIX + nowTime + URL_MQ_KEY;
 
         mq = RedisMQ.buildIfAbsent(mqKey, String.class);
         return oldTime;
@@ -63,7 +63,7 @@ public class CountUVHelper {
      * @return 返回数量
      */
     public static Long countPV(String time, String url) {
-        String pvKey = COUNT_UV_KEY_PREFIX + time + PV_NUM_KEY_PREFIX + url;
+        String pvKey = COUNT_UV_KEY_PREFIX + time + PV_NUM_KEY + url;
         String s = stringRedisTemplate.opsForValue().get(pvKey);
 
         if (StrUtil.isBlank(s)) return 0L;
@@ -78,7 +78,7 @@ public class CountUVHelper {
      * @return 返回数量
      */
     public static Long countUV(String time, String url) {
-        String uvKey = COUNT_UV_KEY_PREFIX + time + UV_NUM_KEY_PREFIX + url;
+        String uvKey = COUNT_UV_KEY_PREFIX + time + UV_NUM_KEY + url;
 
         return stringRedisTemplate.opsForHyperLogLog().size(uvKey);
     }
@@ -90,8 +90,8 @@ public class CountUVHelper {
      * @param url 页面地址
      */
     public static void deleteKey(String time, String url) {
-        String pvKey = COUNT_UV_KEY_PREFIX + time + PV_NUM_KEY_PREFIX + url;
-        String uvKey = COUNT_UV_KEY_PREFIX + time + UV_NUM_KEY_PREFIX + url;
+        String pvKey = COUNT_UV_KEY_PREFIX + time + PV_NUM_KEY + url;
+        String uvKey = COUNT_UV_KEY_PREFIX + time + UV_NUM_KEY + url;
 
         stringRedisTemplate.delete(Arrays.asList(pvKey, uvKey));
     }
@@ -146,9 +146,9 @@ public class CountUVHelper {
         nowTime = new SimpleDateFormat(PU_UV_KEY_PATTERN).format(new Date());
         set = new HashSet<>();
 
-        pvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + PV_NUM_KEY_PREFIX;
-        uvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + UV_NUM_KEY_PREFIX;
-        mqKey = COUNT_UV_KEY_PREFIX + nowTime + URL_MQ_KEY_PREFIX;
+        pvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + PV_NUM_KEY;
+        uvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + UV_NUM_KEY;
+        mqKey = COUNT_UV_KEY_PREFIX + nowTime + URL_MQ_KEY;
 
         mq = RedisMQ.buildIfAbsent(mqKey, String.class);
     }
