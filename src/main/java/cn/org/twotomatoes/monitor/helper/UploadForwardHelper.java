@@ -14,7 +14,7 @@ import static cn.org.twotomatoes.monitor.constant.ForwardConstants.*;
 public class UploadForwardHelper {
 
     public static String getURL(String type) {
-        return map.getOrDefault(type, DEFAULT);
+        return map.getOrDefault(type, FAIL_URL);
     }
 
     private static final HashMap<String, String> map;
@@ -30,8 +30,8 @@ public class UploadForwardHelper {
         map.put(PAINT_TIME, PAINT_TIME_URL);
         map.put(FIRST_INPUT_DELAY, FIRST_INPUT_DELAY_URL);
         map.put(LONG_TASK, LONG_TASK_URL);
-        map.put(VISIT_INFO_PV, VISIT_INFO_PV_URL);
-        map.put(VISIT_INFO_UV, VISIT_INFO_UV_URL);
+        map.put(VISIT_INFO_PV, VISIT_INFO_URL);
+        map.put(VISIT_INFO_UV, VISIT_INFO_URL);
         map.put(STAY_TIME, STAY_TIME_URL);
     }
 }
