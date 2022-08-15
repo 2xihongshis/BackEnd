@@ -1,39 +1,36 @@
-package cn.org.twotomatoes.monitor.filter;
+package cn.org.twotomatoes.monitor.controller;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.org.twotomatoes.monitor.common.MyRequestWrapper;
 import cn.org.twotomatoes.monitor.dto.R;
 import cn.org.twotomatoes.monitor.helper.UploadForwardHelper;
-import cn.org.twotomatoes.monitor.util.IPUtils;
 import cn.org.twotomatoes.monitor.util.Holder;
+import cn.org.twotomatoes.monitor.util.IPUtils;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static cn.org.twotomatoes.monitor.constant.ForwardConstants.FAIL_URL;
 import static cn.org.twotomatoes.monitor.constant.ForwardConstants.VISIT_INFO_URL;
 import static cn.org.twotomatoes.monitor.util.Holder.IP_HOLDER;
 import static cn.org.twotomatoes.monitor.util.Holder.UUID_HOLDER;
 
-
 /**
- * 对上传操作纪律 ip 地址
- *
  * @author HeYunjia
  */
 @Slf4j
-@WebFilter(filterName = "requestFilter", urlPatterns = "/upload")
-public class RequestFilter implements Filter {
-
-//    /**
-//     * 拦截非 POST 的请求
-//     */
-//    private static final String POST = "POST";
+@Controller
+@CrossOrigin("*")
+@RequestMapping("upload")
+public class DataUploadController {
 
     /**
      * 上传数据中的标识字段
@@ -45,16 +42,10 @@ public class RequestFilter implements Filter {
      */
     private static final String UUID = "uuid";
 
-    @Override
+    @PostMapping
+    @SneakyThrows
     @SuppressWarnings("all")
-    public void doFilter(ServletRequest servletRequest,
-                         ServletResponse servletResponse,
-                         FilterChain filterChain)
-            throws IOException, ServletException {
-
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-
+    public void upload(HttpServletRequest request, HttpServletResponse response) {
         String ipAddress = IPUtils.getIpAddress(request);
         log.info("ip 地址为 {} 的客户端上传数据", ipAddress);
         Holder.set(IP_HOLDER, ipAddress);
@@ -62,12 +53,6 @@ public class RequestFilter implements Filter {
         MyRequestWrapper myRequest = new MyRequestWrapper(request);
         String data = myRequest.getBody();
         log.info("客户端上传的数据为: {}", data);
-
-//        if (!POST.equals(request.getMethod())) {
-//            log.info("非 POST 请求, 拦截");
-//            response.getWriter().write(JSONUtil.toJsonStr(R.fail()));
-//            return;
-//        }
 
         JSONObject jsonObject = new JSONObject(data);
         String type = (String) jsonObject.get(TYPE);
@@ -77,7 +62,7 @@ public class RequestFilter implements Filter {
         if (url.equals(FAIL_URL)) {
             log.info("不能识别的数据类型, 拦截");
             response.getWriter().write(JSONUtil.toJsonStr(R.fail()));
-            return;
+            return ;
         }
 
         if (url.equals(VISIT_INFO_URL)) {
@@ -87,5 +72,11 @@ public class RequestFilter implements Filter {
         }
 
         request.getRequestDispatcher(url).forward(myRequest, response);
+    }
+
+    @PostMapping("fail")
+    @ResponseBody
+    public R<String> fail() {
+        return R.fail();
     }
 }
