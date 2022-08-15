@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -45,7 +46,13 @@ public class XhrInfo implements Serializable {
     /**
      * 用户浏览器类型
      */
-    private String userAgent;
+    private String browser;
+
+    /**
+     * 用户操作系统类型
+     */
+    @JsonProperty("OS")
+    private String os;
 
     /**
      * 路径
