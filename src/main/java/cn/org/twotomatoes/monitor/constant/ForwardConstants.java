@@ -9,6 +9,8 @@ public class ForwardConstants {
     public static final String JS_ERROR_URL = "/js-error/upload";
     public static final String PROMISE_ERROR_URL = "/promise-error/upload";
     public static final String RESOURCE_ERROR_URL = "/resource-error/upload";
+    public static final String CUSTOM_ERROR_URL = "/custom-error/upload";
+
 
     public static final String XHR_INFO_URL = "/xhr-info/upload";
     public static final String FETCH_INFO_URL = "/fetch-info/upload";

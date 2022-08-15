@@ -6,16 +6,17 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * 记录停留时间
+ * 监控 customError
  */
-@TableName(value = "stay_time")
+@TableName(value = "custom_error")
 @Data
-public class StayTime implements Serializable {
+public class CustomError implements Serializable {
     /**
      * 自增的唯一标识
      */
@@ -49,15 +50,16 @@ public class StayTime implements Serializable {
     private String browser;
 
     /**
-     * 用户操作系统类型
+     * 操作系统类型
      */
     @JsonProperty("OS")
     private String os;
 
     /**
-     * 停留事件
+     * message 列表
      */
-    private String stayTime;
+    @TableField(exist = false)
+    private List<String> message;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

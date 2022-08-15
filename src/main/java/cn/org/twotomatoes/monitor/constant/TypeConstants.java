@@ -8,6 +8,7 @@ public class TypeConstants {
     public static final String JS_ERROR = "jsError";
     public static final String PROMISE_ERROR = "promiseError";
     public static final String RESOURCE_ERROR = "resourceError";
+    public static final String CUSTOM_ERROR = "customError";
 
     public static final String XHR_INFO = "xhr";
     public static final String FETCH_INFO = "fetch";

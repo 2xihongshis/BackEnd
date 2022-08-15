@@ -30,10 +30,10 @@ import static cn.org.twotomatoes.monitor.util.Holder.UUID_HOLDER;
 @WebFilter(filterName = "requestFilter", urlPatterns = "/upload")
 public class RequestFilter implements Filter {
 
-    /**
-     * 拦截非 POST 的请求
-     */
-    private static final String POST = "POST";
+//    /**
+//     * 拦截非 POST 的请求
+//     */
+//    private static final String POST = "POST";
 
     /**
      * 上传数据中的标识字段
@@ -63,11 +63,11 @@ public class RequestFilter implements Filter {
         String data = myRequest.getBody();
         log.info("客户端上传的数据为: {}", data);
 
-        if (!POST.equals(request.getMethod())) {
-            log.info("非 POST 请求, 拦截");
-            response.getWriter().write(JSONUtil.toJsonStr(R.fail()));
-            return;
-        }
+//        if (!POST.equals(request.getMethod())) {
+//            log.info("非 POST 请求, 拦截");
+//            response.getWriter().write(JSONUtil.toJsonStr(R.fail()));
+//            return;
+//        }
 
         JSONObject jsonObject = new JSONObject(data);
         String type = (String) jsonObject.get(TYPE);

@@ -11,6 +11,7 @@ import cn.org.twotomatoes.monitor.mapper.VisitInfoMapper;
 import org.springframework.stereotype.Service;
 
 import static cn.org.twotomatoes.monitor.util.Holder.IP_HOLDER;
+import static cn.org.twotomatoes.monitor.util.Holder.UUID_HOLDER;
 
 
 /**
@@ -22,7 +23,9 @@ public class VisitInfoServiceImpl extends ServiceImpl<VisitInfoMapper, VisitInfo
 
     @Override
     public R<String> uploadVisitInfo(VisitInfo visitInfo) {
-        CountUVHelper.addRecord(visitInfo.getUrl(), Holder.get(IP_HOLDER));
+        CountUVHelper.addRecord(visitInfo.getUrl(),
+                Holder.get(IP_HOLDER),
+                Holder.get(UUID_HOLDER));
 
         return save(FilterEntityHelper.format(visitInfo))
                 ? R.success()

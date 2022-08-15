@@ -36,31 +36,31 @@ public class CountUVTask {
     @SneakyThrows
     @Scheduled(cron = "0 0 0/1 * * *")
     private void backupUV() {
-        String time = CountUVHelper.updateTime();
-        log.info("backupUV 执行, 记录 time: {}", time);
-        String key = COUNT_UV_KEY_PREFIX + time + URL_MQ_KEY;
-
-        RedisMQ<String> mq = RedisMQ.getMQByKey(key);
-        if (mq == null) return;
-
-        RedisMQResult<String> message = mq.poll();
-        while (ObjectUtil.isNotNull(message)) {
-            String url = message.getValue();
-
-            PvAndUv pvAndUv = new PvAndUv();
-            pvAndUv.setTime(new SimpleDateFormat(PU_UV_KEY_PATTERN).parse(time));
-            pvAndUv.setPvNum(CountUVHelper.countPV(time, url));
-            pvAndUv.setUvNum(CountUVHelper.countUV(time, url));
-            pvAndUv.setUrl(URLUtils.convert(url, true));
-
-            pvAndUvService.save(pvAndUv);
-
-            CountUVHelper.deleteKey(time, url);
-
-            mq.ack(message);
-            message = mq.poll();
-        }
-
-        mq.delete();
+//        String time = CountUVHelper.updateTime();
+//        log.info("backupUV 执行, 记录 time: {}", time);
+//        String key = COUNT_UV_KEY_PREFIX + time + URL_MQ_KEY;
+//
+//        RedisMQ<String> mq = RedisMQ.getMQByKey(key);
+//        if (mq == null) return;
+//
+//        RedisMQResult<String> message = mq.poll();
+//        while (ObjectUtil.isNotNull(message)) {
+//            String url = message.getValue();
+//
+//            PvAndUv pvAndUv = new PvAndUv();
+//            pvAndUv.setTime(new SimpleDateFormat(PU_UV_KEY_PATTERN).parse(time));
+//            pvAndUv.setPvNum(CountUVHelper.countPV(time, url));
+//            pvAndUv.setUvNum(CountUVHelper.countUV(time, url));
+//            pvAndUv.setUrl(URLUtils.convert(url, true));
+//
+//            pvAndUvService.save(pvAndUv);
+//
+//            CountUVHelper.deleteKey(time, url);
+//
+//            mq.ack(message);
+//            message = mq.poll();
+//        }
+//
+//        mq.delete();
     }
 }

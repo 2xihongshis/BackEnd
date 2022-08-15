@@ -45,8 +45,9 @@ public class CountUVHelper {
      *
      * @param url 页面 url
      * @param ip 客户端 ip
+     * @param uuid 客户端 独立 ip
      */
-    public static void addRecord(String url, String ip) {
+    public static void addRecord(String url, String ip, String uuid) {
         url = URLUtils.convert(url);
         String pvKey = pvKeyPrefix + url;
         String uvKey = uvKeyPrefix + url;
