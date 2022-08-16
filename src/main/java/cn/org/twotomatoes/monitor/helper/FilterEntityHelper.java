@@ -127,4 +127,24 @@ public class FilterEntityHelper {
         return xhrInfo;
     }
 
+    /**
+     * 将 CustomError 数据过滤为数据库能接受的数据
+     *
+     * @param customError 待过滤的数据
+     * @return 返回过滤后的数据
+     */
+    public static CustomError format(CustomError customError) {
+        return customError;
+    }
+
+    /**
+     * 将 CustomMessage 数据过滤为数据库能接受的数据
+     *
+     * @param customMessage 待过滤的数据
+     * @return 返回过滤后的数据
+     */
+    public static CustomMessage format(CustomMessage customMessage) {
+        return customMessage;
+    }
+
 }

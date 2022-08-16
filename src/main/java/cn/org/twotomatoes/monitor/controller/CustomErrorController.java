@@ -1,6 +1,7 @@
 package cn.org.twotomatoes.monitor.controller;
 
 import cn.hutool.json.JSONUtil;
+import cn.org.twotomatoes.monitor.dto.CustomErrorDTO;
 import cn.org.twotomatoes.monitor.dto.R;
 import cn.org.twotomatoes.monitor.entity.CustomError;
 import cn.org.twotomatoes.monitor.service.CustomErrorService;
@@ -22,9 +23,9 @@ public class CustomErrorController {
     private CustomErrorService customErrorService;
 
     @PostMapping("upload")
-    public R<String> uploadCustomError(@RequestBody CustomError customError) {
-        log.info("上传数据 customError: {}", JSONUtil.toJsonStr(customError));
+    public R<String> uploadCustomError(@RequestBody CustomErrorDTO customErrorDTO) {
+        log.info("上传数据 customError: {}", JSONUtil.toJsonStr(customErrorDTO));
 
-        return customErrorService.uploadCustomError(customError);
+        return customErrorService.uploadCustomError(customErrorDTO);
     }
 }

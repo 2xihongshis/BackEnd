@@ -1,32 +1,23 @@
-package cn.org.twotomatoes.monitor.entity;
-
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
-import java.util.List;
+package cn.org.twotomatoes.monitor.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
- * 监控 customError
+ * @author HeYunjia
  */
-@TableName(value = "custom_error")
 @Data
-public class CustomError implements Serializable {
+public class CustomErrorDTO {
     /**
      * 自增的唯一标识
      */
-    @TableId
     private Long id;
 
     /**
      * 请求的 ip 地址
      */
-    @TableField(fill = FieldFill.INSERT)
     private String ip;
 
     /**
@@ -55,6 +46,8 @@ public class CustomError implements Serializable {
     @JsonProperty("OS")
     private String os;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    /**
+     * message 列表
+     */
+    private List<String> message;
 }

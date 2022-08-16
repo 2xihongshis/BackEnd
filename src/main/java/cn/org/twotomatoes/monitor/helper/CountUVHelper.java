@@ -36,7 +36,7 @@ public class CountUVHelper {
         uvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + UV_NUM_KEY;
         mqKey = COUNT_UV_KEY_PREFIX + nowTime + URL_MQ_KEY;
 
-        mq = RedisMQ.buildIfAbsent(mqKey, String.class);
+        mq = RedisMQ.getOrCreate(mqKey, String.class);
         return oldTime;
     }
 
@@ -151,6 +151,6 @@ public class CountUVHelper {
         uvKeyPrefix = COUNT_UV_KEY_PREFIX + nowTime + UV_NUM_KEY;
         mqKey = COUNT_UV_KEY_PREFIX + nowTime + URL_MQ_KEY;
 
-        mq = RedisMQ.buildIfAbsent(mqKey, String.class);
+        mq = RedisMQ.getOrCreate(mqKey, String.class);
     }
 }

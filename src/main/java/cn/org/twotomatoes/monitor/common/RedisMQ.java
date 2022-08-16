@@ -1,96 +1,98 @@
 package cn.org.twotomatoes.monitor.common;
 
-import cn.hutool.core.util.BooleanUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import lombok.SneakyThrows;
-import org.springframework.data.redis.connection.stream.Consumer;
-import org.springframework.data.redis.connection.stream.ReadOffset;
-import org.springframework.data.redis.connection.stream.StreamOffset;
-import org.springframework.data.redis.connection.stream.StreamReadOptions;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.List;
+
 
 /**
+ * 基于 RedisTemplate 实现的消息队列
+ *
  * @author HeYunjia
  */
-
 public class RedisMQ<T> {
 
-    private final String mpKey;
-    private final String typeKey;
-    private final Class<T> valueType;
-
-    private RedisMQ(String key, Class<T> valueType) {
-        this.mpKey = key + MQ_KEY_SUFFIX;
-        this.typeKey = key + MQ_OBJECT_TYPE_SUFFIX;
-        this.valueType = valueType;
+    /**
+     * 使用类需要先注入 StringRedisTemplate
+     *
+     * @param template StringRedisTemplate
+     */
+    public static void setStringRedisTemplate(StringRedisTemplate template) {
+        RedisMQ.template = template;
     }
 
     /**
      * 创建一个 id 为 key 的消息队列
      *
-     * @param key 消息队列的唯一标识
+     * @param key 消息队列的 redis 标识
      * @param valueType 存放的数据类型
      */
-    public static <T> RedisMQ<T> build(String key, Class<T> valueType) {
-        template.opsForStream().createGroup(key + MQ_KEY_SUFFIX, MQ_GROUP_NAME);
-        template.opsForValue().set(key + MQ_OBJECT_TYPE_SUFFIX, valueType.getName());
+    public static <T> RedisMQ<T> create(String key, Class<T> valueType) {
+        if (template == null) throw new RuntimeException("need to call setStringRedisTemplate()");
+
+        createMQ(key);
+        return new RedisMQ<>(key, valueType);
+    }
+
+    /**
+     * 获取一个 id 为 key, 数据类型为 valueType 的消息队列, 不存在时创建
+     *
+     * @param key 消息队列的 redis 标识
+     * @param valueType 存放的数据类型
+     */
+    public static <T> RedisMQ<T> getOrCreate(String key, Class<T> valueType) {
+        if (!exist(key)) return create(key, valueType);
 
         return new RedisMQ<>(key, valueType);
     }
 
     /**
-     * 创建一个 id 为 key 的消息队列, 当且仅当不存在 id 为 key 的消息队列
+     * 往 id 为 key 的消息队列中, 添加一条消息 obj
      *
-     * @param key 消息队列的唯一标识
+     * @param data 要存入消息队列的数据
      */
-    public static <T> RedisMQ<T> buildIfAbsent(String key, Class<T> valueType) {
-        if (!exist(key)) return build(key, valueType);
-
-        return new RedisMQ<>(key, valueType);
+    public void offer(T data) {
+        template.opsForStream()
+                .add(mpKey, Collections.singletonMap(MQ_MAP_KEY, toString(data)));
     }
 
     /**
-     * 重建消息队列
+     * 从消息队列中读取一条数据
+     *
+     * @return 返回队列中的下一条数据, 如果为空返回 null
      */
-    public void reBuild() {
-        delete();
-
-        template.opsForStream().createGroup(mpKey, MQ_GROUP_NAME);
-        template.opsForValue().set(typeKey, valueType.getName());
+    public RedisMQResult<T> poll() {
+        return poll(true);
     }
 
     /**
-     * 按照 key 查找队列
+     * 确认消息队列中的消息 message
      *
-     * @param key 队列的 id
-     * @return 返回队列
+     * @param message 从消息队列中获取到的数据
      */
-    @SuppressWarnings("unchecked")
-    public static <T> RedisMQ<T> getMQByKey(String key) {
-        Class<?> valueType = getValueType(key);
-        if (valueType == null) return null;
+    public void ack(RedisMQResult<T> message) {
+        if (message == null) throw new RuntimeException("parameter is null");
 
-        return new RedisMQ<>(key, (Class<T>) valueType);
+        template.opsForStream().acknowledge(mpKey, MQ_GROUP_NAME, message.getId());
     }
 
     /**
-     * 获取 id 为 key 的队列的 value 类型
-     *
-     * @param key 队列的 id
-     * @return 队列的 value 类型
+     * 清空消息队列
      */
-    @SneakyThrows
-    public static Class<?> getValueType(String key) {
-        String valueType = template.opsForValue().get(key + MQ_OBJECT_TYPE_SUFFIX);
-        if (StrUtil.isBlank(valueType)) return null;
+    public void clear() {
+        destroy();
+        createMQ(mpKey);
+    }
 
-        return Class.forName(valueType);
+    /**
+     * 删除队列
+     */
+    public void destroy() {
+        template.delete(Collections.singletonList(mpKey));
     }
 
     /**
@@ -100,92 +102,140 @@ public class RedisMQ<T> {
      * @return 存在 true, 不存在 false
      */
     public static boolean exist(String key) {
-        return BooleanUtil.isTrue(template.hasKey(key + MQ_KEY_SUFFIX));
+        return Boolean.TRUE.equals(template.hasKey(key));
     }
 
     /**
-     * 往 id 为 key 的消息队列中, 添加一条消息 obj
+     * 创建一个 id 为 key 的消息队列
      *
-     * @param data 要存入消息队列的数据
+     * @param key 消息队列的 redis 标识
      */
-    public void offer(T data) {
-        if (!exist(mpKey)) reBuild();
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put(MQ_MAP_KEY, JSONUtil.toJsonStr(data));
-        template.opsForStream().add(mpKey, map);
+    private static void createMQ(String key) {
+        template.opsForStream().createGroup(key, MQ_GROUP_NAME);
     }
 
     /**
-     * 从消息队列中读取一条数据
-     *
-     * @return 返回队列中的下一条数据, 如果为空返回 null
+     * 从 pending-list 中读取一条数据存到阻塞队列
      */
-    public RedisMQResult<T> poll() {
-        RedisMQResult<T> result = readOneByPendingList();
-
-        return ObjectUtil.isNotNull(result) ? result : readOneByBlock();
+    private void transferPendingList() {
+        template.execute(TRANSFER_SCRIPT, Collections.singletonList(mpKey));
     }
 
     /**
-     * 从消息队列的阻塞队列中, 读取一条消息
+     * 读取队列中的一条数据, 如果不存在, 尝试看 pending-list 中是否存在
+     * 如果存在, 将其放在阻塞队列中再次执行 poll, 重复调用最多一次.
      *
-     * @return 返回一条消息数据
+     * @param isFirst 是否时第一次
+     * @return 返回队列中的下一条数据, 不存在返回 null
      */
     @SuppressWarnings("unchecked")
-    private RedisMQResult<T> readOneByBlock() {
-        return RedisMQResult.convert(
-                template.opsForStream().read(
-                        Consumer.from(MQ_GROUP_NAME, MQ_CONSUMER_NAME),
-                        StreamReadOptions.empty().count(1)
-                                .block(Duration.ofSeconds(2)),
-                        StreamOffset.create(mpKey, ReadOffset.lastConsumed())),
-                valueType);
-    }
-
-    /**
-     * 从消息队列的 pending-list 中读取一条数据
-     *
-     * @return 返回一条数据, 为空返回 Optional.empty()
-     */
-    @SuppressWarnings("unchecked")
-    private RedisMQResult<T> readOneByPendingList() {
-        return RedisMQResult.convert(
+    private RedisMQResult<T> poll(boolean isFirst) {
+        RedisMQResult<T> convert = convert(
                 template.opsForStream().read(
                         Consumer.from(MQ_GROUP_NAME, MQ_CONSUMER_NAME),
                         StreamReadOptions.empty().count(1),
-                        StreamOffset.create(mpKey, ReadOffset.lastConsumed())),
-                valueType);
+                        StreamOffset.create(mpKey, ReadOffset.lastConsumed())));
+        if (convert != null) return convert;
+
+        transferPendingList();
+        return isFirst ? poll(false) : null;
     }
 
     /**
-     * 确认消息队列中的消息 result
+     * 将查询 Redis 得到的对象转换为需要的结果对象
      *
-     * @param result 从消息队列中获取到的数据
+     * @param data 查询结果
+     * @return MQ 结果对象
      */
-    public void ack(RedisMQResult<T> result) {
-        if (ObjectUtil.isNull(result)) throw new RuntimeException();
+    private RedisMQResult<T> convert(List<MapRecord<String, Object, Object>> data) {
+        if (data == null || data.isEmpty() || data.get(0) == null) return null;
 
-        template.opsForStream()
-                .acknowledge(mpKey, MQ_GROUP_NAME, result.getId());
+        return new Result<>(data.get(0).getId(),
+                toBean(data.get(0).getValue().get(MQ_MAP_KEY)));
     }
 
     /**
-     * 删除队列
+     * 将 Java 对象序列化为 Json 字符串
+     *
+     * @param data Java 对象
+     * @return 序列化后的字符串
      */
-    public void delete() {
-        template.delete(Arrays.asList(mpKey, typeKey));
+    private String toString(T data) {
+        String result;
+        try {
+            result = MAPPER.writeValueAsString(data);
+        } catch (Exception e) {
+            throw new ClassCastException();
+        }
+        return result;
     }
+
+    /**
+     * 将 Json 字符串解码为 Java 对象
+     *
+     * @param value Json 字符串
+     * @return Java 对象
+     */
+    private T toBean(Object value) {
+        T result;
+        try {
+            result = MAPPER.readValue((String) value, valueType);
+        } catch (Exception e) {
+            throw new ClassCastException();
+        }
+        return result;
+    }
+
+    /**
+     * 返回使用的结果类
+     *
+     * @param <T> 数据类型
+     */
+    private static class Result<T> extends RedisMQResult<T> {
+        private Result(RecordId id, T value) {
+            this.id = id;
+            this.value = value;
+        }
+    }
+
+    /**
+     * 私有构造函数
+     *
+     * @param key 队列名字
+     * @param valueType 存放的数据类型
+     */
+    private RedisMQ(String key, Class<T> valueType) {
+        this.mpKey = key;
+        this.valueType = valueType;
+    }
+
+    /**
+     * 队列名字
+     */
+    private final String mpKey;
+
+    /**
+     * 存放的数据类型
+     */
+    private final Class<T> valueType;
 
     private static StringRedisTemplate template;
 
-    public static void setStringRedisTemplate(StringRedisTemplate template) {
-        RedisMQ.template = template;
-    }
+    private static final String TRANSFER_SCRIPT_TEXT =
+            "local result=redis.call('XREADGROUP'," +
+                    "'GROUP','group','consumer','COUNT',1," +
+                    "'STREAMS',KEYS[1],'0');" +
+                    "if type(result[1][2][1])~='table' then return 0;end;" +
+                    "redis.call('XADD',KEYS[1],'*','key',result[1][2][1][2][2]);" +
+                    "redis.call('XACK',KEYS[1],'group',result[1][2][1][1]);" +
+                    "return 1;";
 
-    public static final String MQ_GROUP_NAME = "group";
-    public static final String MQ_CONSUMER_NAME = "consumer";
-    public static final String MQ_MAP_KEY = "key";
-    public static final String MQ_KEY_SUFFIX = "mq";
-    public static final String MQ_OBJECT_TYPE_SUFFIX = "object-ype";
+    private static final DefaultRedisScript<Long> TRANSFER_SCRIPT =
+            new DefaultRedisScript<>(TRANSFER_SCRIPT_TEXT, Long.class);
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private static final String MQ_GROUP_NAME = "group";
+    private static final String MQ_CONSUMER_NAME = "consumer";
+    private static final String MQ_MAP_KEY = "key";
 }
