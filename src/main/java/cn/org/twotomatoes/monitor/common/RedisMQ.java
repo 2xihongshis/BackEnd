@@ -81,14 +81,6 @@ public class RedisMQ<T> {
     }
 
     /**
-     * 清空消息队列
-     */
-    public void clear() {
-        destroy();
-        createMQ(mpKey);
-    }
-
-    /**
      * 删除队列
      */
     public void destroy() {
@@ -115,13 +107,6 @@ public class RedisMQ<T> {
     }
 
     /**
-     * 从 pending-list 中读取一条数据存到阻塞队列
-     */
-    private void transferPendingList() {
-        template.execute(TRANSFER_SCRIPT, Collections.singletonList(mpKey));
-    }
-
-    /**
      * 读取队列中的一条数据, 如果不存在, 尝试看 pending-list 中是否存在
      * 如果存在, 将其放在阻塞队列中再次执行 poll, 重复调用最多一次.
      *
@@ -139,6 +124,18 @@ public class RedisMQ<T> {
 
         transferPendingList();
         return isFirst ? poll(false) : null;
+    }
+
+    /**
+     * 从 pending-list 中读取一条数据存到阻塞队列
+     */
+    private void transferPendingList() {
+        try {
+            Thread.sleep(BASE_TIME + random());
+        } catch (Exception e) {
+            throw new RuntimeException("InterruptedException");
+        }
+        template.execute(TRANSFER_SCRIPT, Collections.singletonList(mpKey));
     }
 
     /**
@@ -184,6 +181,15 @@ public class RedisMQ<T> {
             throw new ClassCastException();
         }
         return result;
+    }
+
+    /**
+     * 获取一个 1 秒以内的随机时间
+     *
+     * @return 随机时间
+     */
+    private int random() {
+        return (int) (Math.random() * RANDOM_TIME);
     }
 
     /**
@@ -234,6 +240,9 @@ public class RedisMQ<T> {
             new DefaultRedisScript<>(TRANSFER_SCRIPT_TEXT, Long.class);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private static final int BASE_TIME = 2000;
+    private static final int RANDOM_TIME = 1000;
 
     private static final String MQ_GROUP_NAME = "group";
     private static final String MQ_CONSUMER_NAME = "consumer";
