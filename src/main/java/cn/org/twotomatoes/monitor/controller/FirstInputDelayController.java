@@ -6,6 +6,7 @@ import cn.org.twotomatoes.monitor.entity.FirstInputDelay;
 import cn.org.twotomatoes.monitor.service.FirstInputDelayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -21,6 +22,7 @@ public class FirstInputDelayController {
     @Resource
     private FirstInputDelayService firstInputDelayService;
 
+    @ApiIgnore
     @PostMapping("upload")
     public R<String> uploadFirstInputDelay(@RequestBody FirstInputDelay firstInputDelay) {
         log.info("上传数据 firstInputDelay: {}", JSONUtil.toJsonStr(firstInputDelay));

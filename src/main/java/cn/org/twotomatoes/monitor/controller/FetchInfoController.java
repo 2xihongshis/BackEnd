@@ -6,6 +6,7 @@ import cn.org.twotomatoes.monitor.entity.FetchInfo;
 import cn.org.twotomatoes.monitor.service.FetchInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -21,6 +22,7 @@ public class FetchInfoController {
     @Resource
     private FetchInfoService fetchInfoService;
 
+    @ApiIgnore
     @PostMapping("upload")
     public R<String> uploadFetchInfo(@RequestBody FetchInfo fetchInfo) {
         log.info("上传数据 fetchInfo: {}", JSONUtil.toJsonStr(fetchInfo));

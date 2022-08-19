@@ -29,6 +29,11 @@ public class VisitInfo implements Serializable {
     private String ip;
 
     /**
+     * 用户的标识
+     */
+    private String uuid;
+
+    /**
      * 页面标题
      */
     private String title;
@@ -68,6 +73,12 @@ public class VisitInfo implements Serializable {
      * 可视区域尺寸
      */
     private String screen;
+
+    /**
+     * 来源网站
+     */
+    @JsonProperty("source")
+    private String sourceUrl;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

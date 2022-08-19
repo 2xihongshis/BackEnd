@@ -1,5 +1,7 @@
 package cn.org.twotomatoes.monitor.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 
@@ -12,21 +14,16 @@ import static cn.org.twotomatoes.monitor.constant.RConstants.*;
  */
 
 @Getter
+@ApiModel("统一返回类")
 public class R<T> {
 
-    /**
-     * 编码: 2 成功但没有数据, 1 成功, 0 失败, -1 异常
-     */
+    @ApiModelProperty("编码: 2 成功但没有数据, 1 成功, 0 失败, -1 异常")
     private Integer code;
 
-    /**
-     * 错误信息
-     */
+    @ApiModelProperty("错误信息")
     private String msg;
 
-    /**
-     * 数据
-     */
+    @ApiModelProperty("数据")
     private T data;
 
     private R() {}

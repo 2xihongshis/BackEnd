@@ -6,6 +6,7 @@ import cn.org.twotomatoes.monitor.entity.BlankScreen;
 import cn.org.twotomatoes.monitor.service.BlankScreenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -21,6 +22,7 @@ public class BlankScreenController {
     @Resource
     private BlankScreenService blankScreenService;
 
+    @ApiIgnore
     @PostMapping("upload")
     public R<String> uploadBlankScreen(@RequestBody BlankScreen blankScreen) {
         log.info("上传数据 blankScreen: {}", JSONUtil.toJsonStr(blankScreen));

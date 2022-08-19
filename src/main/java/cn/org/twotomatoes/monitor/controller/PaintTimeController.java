@@ -6,6 +6,7 @@ import cn.org.twotomatoes.monitor.entity.PaintTime;
 import cn.org.twotomatoes.monitor.service.PaintTimeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -21,6 +22,7 @@ public class PaintTimeController {
     @Resource
     private PaintTimeService paintTimeService;
 
+    @ApiIgnore
     @PostMapping("upload")
     public R<String> uploadPaintTime(@RequestBody PaintTime paintTime) {
         log.info("上传数据 paintTime: {}", JSONUtil.toJsonStr(paintTime));

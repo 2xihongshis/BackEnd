@@ -6,6 +6,7 @@ import cn.org.twotomatoes.monitor.entity.ResourceError;
 import cn.org.twotomatoes.monitor.service.ResourceErrorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -21,6 +22,7 @@ public class ResourceErrorController {
     @Resource
     private ResourceErrorService resourceErrorService;
 
+    @ApiIgnore
     @PostMapping("upload")
     public R<String> uploadResourceError(@RequestBody ResourceError resourceError) {
         log.info("上传数据 resourceError: {}", JSONUtil.toJsonStr(resourceError));

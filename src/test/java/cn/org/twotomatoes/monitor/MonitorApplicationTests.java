@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 @Slf4j
 @SpringBootTest
@@ -28,6 +30,7 @@ class MonitorApplicationTests {
     @Test
     @SneakyThrows
     void testSearcher() {
+        stringRedisTemplate.opsForValue().set("北京", "24124");
 
         String ip1 = searcher.search("121.89.216.110");
         String ip2 = searcher.search("196.211.10.146");

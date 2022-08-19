@@ -1,21 +1,11 @@
 package cn.org.twotomatoes.monitor.schedule;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.org.twotomatoes.monitor.common.RedisMQ;
-import cn.org.twotomatoes.monitor.common.RedisMQResult;
-import cn.org.twotomatoes.monitor.entity.PvAndUv;
-import cn.org.twotomatoes.monitor.helper.CountUVHelper;
-import cn.org.twotomatoes.monitor.service.PvAndUvService;
-import cn.org.twotomatoes.monitor.util.URLUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-
-import static cn.org.twotomatoes.monitor.constant.RedisConstants.*;
 
 /**
  * 将 redis 中 pv uv 数据备份到数据库
@@ -25,9 +15,6 @@ import static cn.org.twotomatoes.monitor.constant.RedisConstants.*;
 @Slf4j
 @Component
 public class CountUVTask {
-
-    @Resource
-    private PvAndUvService pvAndUvService;
 
     /**
      * 保存 redis 中的 uv 数据到 mysql

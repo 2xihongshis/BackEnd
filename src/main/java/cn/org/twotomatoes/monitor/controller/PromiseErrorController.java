@@ -6,6 +6,7 @@ import cn.org.twotomatoes.monitor.entity.PromiseError;
 import cn.org.twotomatoes.monitor.service.PromiseErrorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -22,6 +23,7 @@ public class PromiseErrorController {
     @Resource
     private PromiseErrorService promiseErrorService;
 
+    @ApiIgnore
     @PostMapping("upload")
     public R<String> uploadPromiseError(@RequestBody PromiseError promiseError) {
         log.info("上传数据 promiseError: {}", JSONUtil.toJsonStr(promiseError));
