@@ -147,4 +147,13 @@ public class FilterEntityHelper {
         return customMessage;
     }
 
+    /**
+     * 将 ResourceEntity 数据过滤为数据库能接受的数据
+     *
+     * @param resource 待过滤的数据
+     * @return 返回过滤后的数据
+     */
+    public static ResourceEntity format(ResourceEntity resource) {
+        return resource;
+    }
 }

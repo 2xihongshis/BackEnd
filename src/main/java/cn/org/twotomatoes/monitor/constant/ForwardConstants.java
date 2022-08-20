@@ -26,5 +26,7 @@ public class ForwardConstants {
 
     public static final String STAY_TIME_URL = "/stay-time/upload";
 
+    public static final String RESOURCE_URL = "/resource/upload";
+
     public static final String FAIL_URL = "/url/fail";
 }

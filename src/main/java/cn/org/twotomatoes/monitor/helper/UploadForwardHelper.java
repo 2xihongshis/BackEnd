@@ -39,5 +39,7 @@ public class UploadForwardHelper {
         map.put(VISIT_INFO_UV, VISIT_INFO_URL);
 
         map.put(STAY_TIME, STAY_TIME_URL);
+
+        map.put(RESOURCE, RESOURCE_URL);
     }
 }

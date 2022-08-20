@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.twotomatoes.monitor.mapper.ResourceEntryMapper">
+
+    <resultMap id="BaseResultMap" type="cn.org.twotomatoes.monitor.entity.ResourceEntity">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="ip" column="ip" jdbcType="CHAR"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="timestamp" column="timestamp" jdbcType="CHAR"/>
+            <result property="browser" column="browser" jdbcType="VARCHAR"/>
+            <result property="os" column="os" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="domainLookupStart" column="domain_lookup_start" jdbcType="DOUBLE"/>
+            <result property="domainLookupEnd" column="domain_lookup_end" jdbcType="DOUBLE"/>
+            <result property="connectStart" column="connect_start" jdbcType="DOUBLE"/>
+            <result property="connectEnd" column="connect_end" jdbcType="DOUBLE"/>
+            <result property="duration" column="duration" jdbcType="DOUBLE"/>
+            <result property="encodedBodySize" column="encoded_body_size" jdbcType="VARCHAR"/>
+            <result property="requestStart" column="request_start" jdbcType="DOUBLE"/>
+            <result property="responseEnd" column="response_end" jdbcType="DOUBLE"/>
+            <result property="responseStart" column="response_start" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,ip,title,
+        url,timestamp,browser,
+        os,name,domain_lookup_start,
+        domain_lookup_end,connect_start,connect_end,
+        duration,encoded_body_size,request_start,
+        response_end,response_start
+    </sql>
+</mapper>

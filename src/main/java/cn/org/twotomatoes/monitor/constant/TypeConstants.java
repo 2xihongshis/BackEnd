@@ -24,4 +24,6 @@ public class TypeConstants {
     public static final String VISIT_INFO_UV = "uv";
 
     public static final String STAY_TIME = "stayTime";
+
+    public static final String RESOURCE = "resource";
 }
