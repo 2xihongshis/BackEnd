@@ -41,11 +41,11 @@ public class CountUVHelper {
     }
 
     /**
-     * 页面被访问, 记录 url 和 ip 地址
+     * 页面被访问, 记录 url, ip 和 uuid
      *
      * @param url 页面 url
      * @param ip 客户端 ip
-     * @param uuid 客户端 独立 ip
+     * @param uuid 客户端 独立 id
      */
     public static void addRecord(String url, String ip, String uuid) {
         url = URLUtils.convert(url);

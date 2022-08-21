@@ -1,5 +1,6 @@
 package cn.org.twotomatoes.monitor.vo;
 
+import cn.org.twotomatoes.monitor.dto.InfoEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,5 +15,5 @@ import java.util.List;
 public class SourceUrlVO {
 
     @ApiModelProperty("来源网站")
-    private List<InfoEntryVO> sourceList;
+    private List<InfoEntity> sourceList;
 }

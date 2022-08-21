@@ -1,19 +1,22 @@
 package cn.org.twotomatoes.monitor;
 
 
+import cn.org.twotomatoes.monitor.dto.InfoEntity;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
+import sun.security.jgss.GSSToken;
 
 import javax.annotation.Resource;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
-@SpringBootTest
+@SpringBootTest(classes = MonitorApplication.class)
 class MonitorApplicationTests {
 
     @Resource
@@ -59,6 +62,42 @@ class MonitorApplicationTests {
             }
         }
         return ipRegion.substring(start, end);
+    }
+
+    @Test
+    void testHash() {
+        stringRedisTemplate.opsForHash()
+                .increment("testHash", "testKey", 1);
+        stringRedisTemplate.opsForHash()
+                .increment("testHash", "testKey2", 2);
+
+        Map<Object, Object> testHash = stringRedisTemplate.opsForHash()
+                .entries("testHash");
+
+        System.out.println(testHash);
+
+        List<InfoEntity> list = new LinkedList<>();
+        for (Object key : testHash.keySet()) {
+            InfoEntity infoEntryVO = new InfoEntity();
+            infoEntryVO.setName((String) key);
+            infoEntryVO.setNum((Long.parseLong((String) testHash.get(key))));
+            list.add(infoEntryVO);
+        }
+
+        System.out.println(list);
+    }
+
+    @Test
+    void testHyperLogLog() {
+        stringRedisTemplate.opsForHyperLogLog()
+                .add("key1", "1", "2", "3");
+        Long key2 = stringRedisTemplate.opsForHyperLogLog()
+                .add("key2", "2", "4", "5");
+        System.out.println("key2: " + key2);
+
+        Long union = stringRedisTemplate.opsForHyperLogLog()
+                .union("key1", "key2");
+        System.out.println(union);
     }
 }
 

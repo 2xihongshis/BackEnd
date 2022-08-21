@@ -1,4 +1,4 @@
-package cn.org.twotomatoes.monitor.vo;
+package cn.org.twotomatoes.monitor.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel("数据对单元")
-public class InfoEntryVO {
+public class InfoEntity {
 
     @ApiModelProperty("字段名称")
     private String name;

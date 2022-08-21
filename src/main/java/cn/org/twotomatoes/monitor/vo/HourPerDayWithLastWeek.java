@@ -14,7 +14,7 @@ import java.util.List;
 @ApiModel("每天及其前一周的每小时数据")
 public class HourPerDayWithLastWeek {
 
-    @ApiModelProperty("当前三个月还有")
+    @ApiModelProperty("当天没每小时数据")
     private List<Long> nowNum;
 
     @ApiModelProperty("上周数据")

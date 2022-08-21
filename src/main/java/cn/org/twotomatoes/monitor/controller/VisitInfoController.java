@@ -1,7 +1,9 @@
 package cn.org.twotomatoes.monitor.controller;
 
 import cn.hutool.json.JSONUtil;
+import cn.org.twotomatoes.monitor.dto.InfoEntity;
 import cn.org.twotomatoes.monitor.dto.R;
+import cn.org.twotomatoes.monitor.vo.FlowVO;
 import cn.org.twotomatoes.monitor.entity.VisitInfo;
 import cn.org.twotomatoes.monitor.service.VisitInfoService;
 import cn.org.twotomatoes.monitor.vo.*;
@@ -104,7 +106,7 @@ public class VisitInfoController {
 
         SiteVisitVO siteVisitorVO = new SiteVisitVO();
         siteVisitorVO.setSiteList(new LinkedList<>());
-        siteVisitorVO.getSiteList().add(new InfoEntryVO());
+        siteVisitorVO.getSiteList().add(new InfoEntity());
 
         return R.success(siteVisitorVO);
     }
@@ -118,7 +120,7 @@ public class VisitInfoController {
 
         SourceUrlVO sourceUrlVO = new SourceUrlVO();
         sourceUrlVO.setSourceList(new LinkedList<>());
-        sourceUrlVO.getSourceList().add(new InfoEntryVO());
+        sourceUrlVO.getSourceList().add(new InfoEntity());
 
         return R.success(sourceUrlVO);
     }
@@ -132,7 +134,7 @@ public class VisitInfoController {
 
         CityUserVo cityUserVo = new CityUserVo();
         cityUserVo.setCityList(new LinkedList<>());
-        cityUserVo.getCityList().add(new InfoEntryVO());
+        cityUserVo.getCityList().add(new InfoEntity());
 
         return R.success(cityUserVo);
     }
