@@ -8,7 +8,6 @@ import java.util.HashMap;
 public class Holder {
 
     public static final String IP_HOLDER = "ipHolder";
-    public static final String UUID_HOLDER = "uuidHolder";
 
     public static void set(String key, String value) {
         map.putIfAbsent(key, new ThreadLocal<>());

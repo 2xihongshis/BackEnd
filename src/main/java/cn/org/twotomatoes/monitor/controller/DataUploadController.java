@@ -22,9 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static cn.org.twotomatoes.monitor.constant.ForwardConstants.FAIL_URL;
-import static cn.org.twotomatoes.monitor.constant.ForwardConstants.VISIT_INFO_URL;
 import static cn.org.twotomatoes.monitor.util.Holder.IP_HOLDER;
-import static cn.org.twotomatoes.monitor.util.Holder.UUID_HOLDER;
 
 /**
  * @author HeYunjia
@@ -40,11 +38,6 @@ public class DataUploadController {
      * 上传数据中的标识字段
      */
     private static final String TYPE = "type";
-
-    /**
-     * 上传数据中的访问者标识
-     */
-    private static final String UUID = "uuid";
 
     @PostMapping
     @SneakyThrows
@@ -68,12 +61,6 @@ public class DataUploadController {
             log.info("不能识别的数据类型, 拦截");
             response.getWriter().write(JSONUtil.toJsonStr(R.fail()));
             return ;
-        }
-
-        if (url.equals(VISIT_INFO_URL)) {
-            String uuid = (String) jsonObject.get(UUID);
-            log.info("UUID 数值为: {}", uuid);
-            Holder.set(UUID_HOLDER, uuid);
         }
 
         request.getRequestDispatcher(url).forward(myRequest, response);

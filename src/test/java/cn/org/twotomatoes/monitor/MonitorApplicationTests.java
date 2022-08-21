@@ -2,6 +2,9 @@ package cn.org.twotomatoes.monitor;
 
 
 import cn.org.twotomatoes.monitor.dto.InfoEntity;
+import cn.org.twotomatoes.monitor.helper.CountUVHelper;
+import cn.org.twotomatoes.monitor.helper.RegionHelper;
+import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -11,9 +14,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import sun.security.jgss.GSSToken;
 
 import javax.annotation.Resource;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.SimpleFormatter;
 
 @Slf4j
 @SpringBootTest(classes = MonitorApplication.class)
@@ -35,33 +38,14 @@ class MonitorApplicationTests {
     void testSearcher() {
         stringRedisTemplate.opsForValue().set("北京", "24124");
 
-        String ip1 = searcher.search("121.89.216.110");
-        String ip2 = searcher.search("196.211.10.146");
-        System.out.println(getCountry(ip1));
-        System.out.println(getCountry(ip2));
+        String ip1 = "121.89.216.110";
+        String ip2 = "198.211.10.146";
+        System.out.println(RegionHelper.getCountry(ip1));
+        System.out.println(RegionHelper.getProvince(ip1));
 
-        System.out.println(getProvince(ip1));
-        System.out.println(getProvince(ip2));
+        System.out.println(RegionHelper.getCountry(ip2));
+        System.out.println(RegionHelper.getProvince(ip2));
 
-    }
-
-    public static String getCountry(String ipRegion) {
-        return ipRegion.substring(0, ipRegion.indexOf('|'));
-    }
-
-    public static String getProvince(String ipRegion) {
-        int start = 0, end = 0;
-        for (int i = 0; i < ipRegion.length(); i++) {
-            if (ipRegion.charAt(i) != '|') continue;
-
-            end += 1;
-            if (end == 2) start = i + 1;
-            if (end == 3) {
-                end = i;
-                break;
-            }
-        }
-        return ipRegion.substring(start, end);
     }
 
     @Test
@@ -98,6 +82,38 @@ class MonitorApplicationTests {
         Long union = stringRedisTemplate.opsForHyperLogLog()
                 .union("key1", "key2");
         System.out.println(union);
+    }
+
+    @Test
+    @SneakyThrows
+    void testFormat() {
+
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(new Date(Long.parseLong(timestamp)));
+
+        calendar.add(Calendar.DATE, -1);
+
+        Date time = calendar.getTime();
+
+        System.out.println(simpleDateFormat.format(time));
+    }
+
+    @Test
+    void testCountUV() {
+
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String url = "http://yjoker.work";
+        String sourceUrl = "http://baidu.com";
+        String ip = "121.89.216.110";
+        String uuid = "1234564365465";
+
+        CountUVHelper.addRecord(timestamp, url, sourceUrl, ip, uuid);
+
     }
 }
 
